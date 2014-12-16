@@ -14,6 +14,7 @@ $StreamKey = FileReadLine ("Reinhören.txt",2)
 $Musiktitel = FileReadLine ("Reinhören.txt",3)
 $Spieldauer = FileReadLine ("Reinhören.txt",4)
 $Fenstertitel = FileReadLine ("Reinhören.txt",5)
+$HauptGUI = FileReadLine ("Reinhören.txt",6)
 $Dateigroesse = "-1"
 
 If $StreamIP = "" Or $StreamKey = "" Then
@@ -56,8 +57,7 @@ $dlfertig = 0
 $puffer = 0
 $current = "Blub"
 $bytesread = IniRead("config.ini", "Downloadeinstellungen", "NumberOfBytesToRead", 150000)
-
-ShellExecute ("AutoIt3.exe",'"Reinhören GUI.au3" "'&$file&'" "'&$Musiktitel&'" "'&$Spieldauer&'" "'&$Dateigroesse&'" "'&@AutoItPID&'" "'&$Fenstertitel&'"')
+ShellExecute ("AutoIt3.exe",'"Reinhören GUI.au3" "'&$file&'" "'&$Musiktitel&'" "'&$Spieldauer&'" "'&$Dateigroesse&'" "'&@AutoItPID&'" "'&$Fenstertitel&'" "'&$HauptGUI&'"')
 
 While 1
 	If $dlfertig = 2 Then

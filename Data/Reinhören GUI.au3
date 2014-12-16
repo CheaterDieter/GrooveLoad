@@ -11,7 +11,7 @@ FileClose ($exitfile)
 
 
 ;MsgBox (0,"",$CmdLineRaw )
-If $cmdline[0] <> 6 Then
+If $cmdline[0] <> 7 Then
 	Exit
 EndIf
 $Datei = $cmdline[1]
@@ -20,11 +20,11 @@ $Spieldauer = $cmdline[3]
 $Dateigroesse = $cmdline[4]
 $reinhoerenPID = $cmdline[5]
 $Fenstertitel = $cmdline[6]
-
+$HauptGUI = $cmdline[7]
 
 $dateigroessefuerlabel = Round($Dateigroesse / 1048576, 2)
 
-$Player = GUICreate($Fenstertitel, 330, 75, 0, 0, -1, $WS_EX_TOOLWINDOW + $WS_EX_COMPOSITED)
+$Player = GUICreate($Fenstertitel, 330, 75, 0, 0, -1, $WS_EX_TOOLWINDOW + $WS_EX_COMPOSITED, $HauptGUI)
 
 GUISetBkColor(0xFFFFFF)
 $Wasspielt = GUICtrlCreateLabel($Musiktitel, 13, 8, 308, 23)
