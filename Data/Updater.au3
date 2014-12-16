@@ -55,7 +55,8 @@ Else
 		FileDelete ($Programmverzeichnis&"\Readme.txt")
 		FileDelete ($Programmverzeichnis&"\WICHTIG FÜR DEUTSCHE NUTZER.txt")
 		DirRemove ($Programmverzeichnis & "\Data",1)
-		RunWait('XCOPY "'& $Programmverzeichnis & "\temp\GrooveLoad" & '" "' & $Programmverzeichnis & '" /E')
+		;RunWait('XCOPY "'& $Programmverzeichnis & "\temp\GrooveLoad" & '" "' & $Programmverzeichnis & '" /E')
+		DirCopy($Programmverzeichnis & "\temp\GrooveLoad",$Programmverzeichnis,1)
 		ShellExecute ($Programmverzeichnis&"\Data\run after update.vbs")
 	Else
 		SplashOff ()
