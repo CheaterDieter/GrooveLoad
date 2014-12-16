@@ -204,8 +204,6 @@ If IniRead("Data\config.ini", "Erster Start", "Einführung", 0) = 0 Then
 	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
 	$file = @ScriptDir & "\Data\metamp3\metamp3.exe"
 	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
-	$file = @ScriptDir & "\GrooveLoad.vbs"
-	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
 	$file = @ScriptDir & "\Data\7za.exe"
 	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
 EndIf
@@ -540,8 +538,6 @@ If FileExists(@ScriptDir & "\temp") Then
 	$file = @ScriptDir & "\Data\AutoIt3.exe"
 	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
 	$file = @ScriptDir & "\Data\metamp3\metamp3.exe"
-	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
-	$file = @ScriptDir & "\GrooveLoad.vbs"
 	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
 	$file = @ScriptDir & "\Data\7za.exe"
 	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
@@ -2091,7 +2087,7 @@ While 1
 			WEnd
 
 		Case $GUI_verknuepfung
-			FileCreateShortcut(@ScriptDir & "\GrooveLoad.vbs", @DesktopDir & "\GrooveLoad.lnk", "", "", "", @ScriptDir & "\Data\icon.ico")
+			FileCreateShortcut(@ScriptDir & "\Data\AutoIt3.exe", @DesktopDir & "\GrooveLoad.lnk", "", '"' & @ScriptDir & "\GrooveLoad.au3" & '"', "", @ScriptDir & "\Data\icon.ico")
 			MsgBox(64, "GrooveLoad", sprache("GR_SHORTCUT_TEXT"), 0, $HauptGUI)
 		Case $manuell_Cover
 			ShellExecute("Data\AutoIt3.exe", '"' & @ScriptDir & '\Data\Coversuche.au3"')
