@@ -1,0 +1,193 @@
+[GrooveLoad Language File]
+HELLO=Welcome to GrooveLoad
+GR_GUI_DOWNLOADLIST=Downloads
+GR_GUI_SEARCH=Search
+GR_GUI_SETTINGS=Settings
+GR_GUI_ABOUT=About
+GR_GUI_DOWNLOAD=Download
+GR_GUI_REMOVESELECTED=Delete selected
+GR_GUI_SELECTION=Selection...
+GR_GUI_EXPORTDLLIST=Export download list 
+GR_GUI_IMPORTDLLIST=Import download list 
+GR_GUI_MANUALCS=Manual cover search
+GR_GUI_INPUTTEXT=Search term
+GR_GUI_ADDTODLLIST=Add to Downloads
+GR_GUI_RMVDUPLICATES=Delete doubled titles
+GR_GUI_BATCH=Batch processing
+GR_GUI_POPULAR=Popular Songs
+GR_GUI_CONNECTION=Connection settings
+GR_GUI_DLSETTINGS=Download settings
+GR_GUI_RESET=Reset program
+GR_GUI_LNG=Language
+GR_GUI_SHORTCUT=Create a desktop shortcut for GrooveLoad
+GR_GUI_COPYRIGHT=GrooveLoad version [%] by Cheater Dieter (Autoit.de)
+GR_GUI_ABOUTTEXT=Special thanks:[CRLF]- StevenX (Autoit.de) - design of icons, shaping of the cover search, English translation[CRLF]- lesolutionneur (Autoit.de) - French translation[CRLF]- All who give me feedback. Thank you =)[CRLF][CRLF]Third-party components used in the program:[CRLF] WinHTTP.au3 - Dragana R.[CRLF]Bass.au3 - Brett Francis[CRLF]MetaMP3 v0.91 - Tycho (Copyright information can be found in Data\metamp3\)[CRLF]xMsgBox.au3 - Prog@ndy (AutoIt.de) and Pacific Database Pty Limited[CRLF]7za.exe - Igor Pavlov[CRLF]ScaleImage - UEZ (AutoIt.de)[CRLF]_GUICtrlProgressSetMarquee() - Bob Anthony
+GR_GUI_GERMANY=Use Grooveshark in Germany
+GR_GUI_FEEDBACK=Give feedback
+GR_GUI_RECONNECT=Reconnect
+GR_GUI_SEARCHGUI=Search Results
+GR_GUI_SELECTALL=Select all
+GR_GUI_UNSELECTALL=Deselct all
+GR_GUI_INVERTSELECTION=Invert selction
+GR_GUI_ALBUMSEARCH=Search for Album
+GR_GUI_ARTISTSEARCH=Search for Artist
+GR_GUI_PREVIEW=Preview
+GR_GUI_SHARE=Share
+GR_GUI_STILLDLHEADLINE=hint
+GR_GUI_STILLDL=There are still songs in the download list
+
+GR_DLGUI_PATH=Target folder for Downloads
+GR_DLGUI_BROWSE=Change folder
+GR_DLGUI_NAMES=Pattern for naming and sorting of downloaded files:
+GR_DLGUI_NAMESTEXT=With the option "Pattern for naming and sorting of downloaded files" you are able to sort downloaded files in the target folder in subfolders, too. Enter a filename which is relativ to the target folder with the variables <Title>, <Artist> and <Album>.&In the following are some examples:[CRLF][CRLF]Example 1:[CRLF]Target: C:\music[CRLF]Pattern for naming: <Artist>\<Title>&The files will be saved sorted after the Artist in the target folder. The Song "Yesterday" from the Beatles would be found in C:\music\The Beatles\Yesterday.mp3[CRLF][CRLF]Examle 2:[CRLF]Target: C:\music[CRLF]Pattern for naming: <Artist>\<Album>\<Artist> - <Title>[CRLF]The Song "Yesterday" from the Beatles from the Album "Help!" would be found under C:\music\The Beatles\Help!\The Beatles - Yesterday.mp3.
+GR_DLGUI_TITLE=Title
+GR_DLGUI_ARTIST=Artist
+GR_DLGUI_ALBUM=Album
+GR_DLGUI_USABLE=Usable
+GR_DLGUI_RESET=Reset
+GR_DLGUI_SAVE=Save
+GR_DLGUI_AFTER=After Download:
+GR_DLGUI_EXPLORER=Open the download directory in Windows Explorer
+GR_DLGUI_PLAYLIST=Create Playlist for downloaded songs
+GR_DLGUI_PLAYLISTTEXT=A playlist for makes the import of downloaded MP3s in software - such as iTunes - easier. The playlist will be created in the m3u format in the download directory and in its name is the date and time of the download.
+GR_DLGUI_MP3TAG=Open the download directory with Mp3Tag
+GR_DLGUI_MP3TAGTEXT=Mp3Tag is a free program to edit the in MP3 files saved informations (ID3 Tags). You have to install Mp3Tag and open the Install directory to use this option.
+GR_DLGUI_MP3TAGPATH=Path to Mp3Tag
+GR_DLGUI_NOTSPECIFIED=Not specified
+GR_DLGUI_MP3TAGDL=Click here to download Mp3Tag
+GR_DLGUI_MORE=Other settings:
+GR_DLGUI_COVER=Download the covers of the MP3 Files.
+GR_DLGUI_COVERTEXT=Grooveshark doesn't have cover often. With this Option you can add cover. GrooveLoad will search on Grooveshark, iTunes and Amazon. It will find almost every time a Cover. You can choose what to do with the cover.
+GR_DLGUI_COVERMP3=Integrate cover into MP3 file
+GR_DLGUI_COVERJPG=Save cover as JPG file
+GR_DLGUI_COVERMP3JPG=Integrate cover into MP3 file and save as JPG file
+GR_DLGUI_NAMEEXIST=If file name already exists...
+GR_DLGUI_DIFFERENTNAME=Save the file under a different name
+GR_DLGUI_OVERWRITE=Overwrite existing file
+GR_DLGUI_RULEMISSING=There is no pattern for the naming.
+GR_DLGUI_MP3TAGPATHMISSING=There is not path to Mp3Tag. Open the path or deactivate this option.
+GR_DLGUI_NEWPATH=Open the destination folder.
+
+GR_MSG_CONNECTION=Connected to Grooveshark.
+GR_MSG_32BIT=Please run the 86 bit version.
+GR_MSG_ALREADYRUNNING=GrooveLoad is already running.
+GR_MSG_DISCLAIMER=Use the program at your own risk. You could maybe infringe the copyright of the music or the license agreement of GrooveShark. The software writer isn't liable. The writer is also for damage caused by software (eg due to incorrect programming) not liable. Software is confidential to the current copyright in Germany. Licenses may be issued on request.
+GR_MSG_ACCEPT=Click on OK, if you accept the conditions. Click Cancel if not.
+GR_MSG_DISAGREE=You have to accept the conditions to use the program. Do you like to watch a funny cat movie?
+GR_MSG_GERMANIP=You access to GrooveShark with a german IP adress. It isn't possible to download something from GrooveShark. You can use a fake IP under Settings -> Connection with a Proxyserver or a fake X-FORWARD-Header.
+GR_MSG_ERRORSESSIONID=Error at querying of Session ID and Communication Token.
+GR_MSG_REFRESH=Reconnect...
+GR_MSG_SECRETWORD=Grooveshark did something with their website, the used "Secret word" for the Key is not working. Without the actual "Secret word" the program doesn't work :(
+GR_MSG_SEARCHERROR=Error at search
+GR_MSG_STREAMDATAERROR=Error at Download of Stream data.
+GR_MSG_RECONNECT=Reconnect...
+GR_MSG_NEWCONNECTION=New connection
+GR_MSG_EMPTY=There are no songs in the Download query
+GR_MSG_NOTHINGFOUND=Nothing found for
+GR_MSG_ADDTODLL=was added to the download list
+GR_MSG_ADDTODLLMORE=titles have been added to the download list
+GR_MSG_STREAMDATA=Determine the stream data
+GR_MSG_TRYRELOAD=Try to redownload Streamdata...
+GR_MSG_CANNOTDOWNLOAD=can not be downloaded and will be omitted.
+GR_MSG_DOWNLOAD=Download from
+GR_MSG_SIZE=File size
+GR_MSG_TIME=Download time
+GR_MSG_SEC=Seconds
+GR_MSG_COVERSEARCH=Seeking cover of [%] at iTunes...
+GR_MSG_ITUNESERROR=No Cover found at iTunes, searching at Amazon...
+GR_MSG_COVERERROR=No cover found
+GR_MSG_COVERDL=Download Cover for [%] from Grooveshark...
+GR_MSG_DLERROR=Download failed
+GR_MSG_DLFINISHED=Download finished
+GR_MSG_NOTEMPTY=There are some title, which are not downloaded. Should they be saved to be added at the next start of the programm?
+
+GR_CONN_PROXY=Use a proxy
+GR_CONN_CHECK=Check connection
+GR_CONN_X=Use X-FORWARDED-FOR IP adress
+GR_CONN_XTEXT=Bypass blocking of Grooveshark with german IPs with faked "X-FORWARDED-FOR" Header. Grooveshark thinks you are from UK with a german Proxyserver mit your IP. The first three blocks are constant, the fourth is random. If you use a Proxy Adress, you can deactivate this option because Proxyserver doesn't pass the X-FORWARDED-FOR IP.
+GR_CONN_IPTEXT=Write down first three Blocks for IP Adress, last will be random.
+GR_CONN_BYTES=Size of Blocks at Download in Bytes. Is the number too low, then the Download is slow. Is it too high, then the program is instable.
+GR_CONN_ERROR=Failed to connect to GrooveShark.
+GR_CONN_GERMANIP=You access to GrooveShark with a german IP adress. It isn't possible to download something from GrooveShark. You can use a fake IP under Settings -> Connection with a Proxyserver or a fake X-FORWARD-Header.
+GR_CONN_ALRIGHT=Connection to GrooveShark works.
+GR_CONN_RESTART=Changes saved. The program will be restarted.
+
+GR_SHARE_LINK=Link to Grooveshark::
+GR_SHARE_REQUESTLINK=Link is retrieved...
+GR_SHARE_COPY=Copy
+GR_SHARE_FACEBOOK=Share on Facebook
+GR_SHARE_TWITTER=Share on Twitter
+GR_SHARE_ERROR=Failed to query link
+
+GR_LNG_CURRENT=Currently used language:
+GR_LNG_CHANGE=Change
+
+GR_FEEDBACK_DESCRIPTION=Whether praises, suggestions or bug requests - you can contact us with this formular.
+
+GR_TUT_NEXT=Next
+GR_TUT_BACK=Back
+GR_TUT_FINISH=Finish
+GR_TUT_1=Welcome to GrooveLoad. This little introduction helps in the operation of this program.
+GR_TUT_2=Enter a keyword and click on the magnifying glass icon or click on the orange balloon that shows you popular songs.
+GR_TUT_3=When you click with the right mouse button on a search result, you can start a artist and album search. Also you can request the link to share the song on Facebook, Twitter, etc. You can listen to the song before you download it, too.
+GR_TUT_4=If you've decided to download a song click two times on it or select it with a hook and click the "Add to download list".
+GR_TUT_5=If you click on the bar on the left side on "Download List", you can see all the songs to be downloaded.
+GR_TUT_6=Before you start the download, you should specify whether the matching covers to the downloaded songs should be added automatically to the downloaded MP3 files. You can specify this in the sownload settings. Click on the button below to open them.
+GR_TUT_7=You've completed the introduction and can now download your first song. Click in the tab "Download List" on "Download". Have fun listening to music!
+
+GR_EXP_FILE=Location to download list
+GR_EXP_SUCCESS=Successfully exported Download List 
+
+GR_IMP_SELECT=Select Download List
+GR_IMP_WAIT=The download list is being imported...
+GR_IMP_STOP=Cancel
+
+GR_AUTO_TEXT=Below you can enter a series of song titles and keywords which are then processed line by line. It is also possible to enter links to Spotify. You will receive them by pressing CTRL and C in Spotify while a title is highlighted.
+GR_AUTO_START=Start search
+GR_AUTO_SEARCH=Looking for the titles...
+GR_AUTO_FINISH=If the titles have been found, they are added to the download list.
+
+GR_SHORTCUT_TEXT=A desktop shortcut was created.
+
+GR_RESET_SURE=Do you really want to reset the program? All settings, log files and saves of the Downloads will be deleted!
+GR_RESET_RESTART=The program is resetted. Should we restart it?
+
+GR_IPFUCK_DESCRIBTION=For german users Grooveshark is blocked. With the installation of "IPFuck" you can go around the barrier without a proxy. The Add-on fakes the HTTP Header and sends a random X-FORWARDED_FOR IP. So you can use Grooveshark without a proxy server from germany.
+GR_IPFUCK_LINK=Download IPFuck for
+
+GR_UPDATE_AVAILABLE=An update for GooveLoad is available.
+GR_UPDATE_VERSION=Used version:
+GR_UPDATE_NEWVERSION=Newest version:
+GR_UPDATE_AUTO=Automatic Update (recommended)
+GR_UPDATE_MANUALLY=Manual download
+GR_UPDATE_LATER=Ask later again
+GR_UPDATE_HEADLINE=New features of GrooveLoad
+GR_UPDATE_CHANGELOG=View Changelog for all versions (only in German available)
+GR_UPDATE_SUCCESS=GrooveLoad successfully updated to version [%].
+
+GR_FINALREPORT_TEXT=The download has been completed.
+GR_FINALREPORT_MARK=Select title
+GR_FINALREPORT_PLAY=Play
+GR_FINALREPORT_DIRECTORY=Open directory
+GR_FINALREPORT_COVER=Change Cover
+GR_FINALREPORT_MP3TAG=Open in MP3tag
+GR_FINALREPORT_EXIT=Exit
+GR_FINALREPORT_COVERPIC=Cover
+GR_FINALREPORT_STORAGELOCATION=Storage location
+GR_FINALREPORT_ERROR=The title hasn't been downloaded successfully.
+
+CS_TITLE=GrooveLoad Cover Search 
+CS_SEARCHTEXT=Enter a search term and let you show to matching covers. 
+CS_SEARCHAT=Search at
+CS_SEARCH=Search
+CS_SEARCH_OWNCOVER=Own cover
+CS_SEARCHERROR=Failed to download the image
+CS_MP3ADD=Add Cover to MP3 file
+CS_SAVE=Save Cover
+CS_STORAGELOCATION=Select storage location
+CS_TEXT=Now you have to select a MP3-File and a JPG-Picture, which will be added to the MP3-file as the cover picture.
+CS_SELECTMP3=Select MP3 file
+CS_PICTURE=Select a picture
+CS_FINISH=The cover was added to the MP3 file.
+CS_SHURE=Are you really want to add the cover the following file? The old one will be overwritten.[%]
+CS_ABOUT=Groove Load Cover Search is a part of GrooveLoad. The progam allows you to search for CD Covers. These can be added to the MP3 files.[CRLF]To start Groove Load Cover Search without GrooveLoad run the file "Cover.vbs" in the folder "Data".

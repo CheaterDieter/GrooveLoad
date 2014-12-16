@@ -1,0 +1,11 @@
+DE>>- Neu: Französische Sprache eingebaut
+- Behoben: Fehlermeldung beim Reinhören
+- Neu: Reinhören-Instanz beendet sich, wenn eine neue gestartet wird.
+- Behoben: Hinweis, dass sich noch Lieder in der DL-Liste befinden war nur auf Deutsch verfügbar
+- Geändert: AutoIt Version auf 3.3.12.0 aktualisiert<<DE
+
+EN>>- Neu: Französische Sprache eingebaut
+- Behoben: Fehlermeldung beim Reinhören
+- Neu: Reinhören-Instanz beendet sich, wenn eine neue gestartet wird.
+- Behoben: Hinweis, dass sich noch Lieder in der DL-Liste befinden war nur auf Deutsch verfügbar
+- Geändert: AutoIt Version auf 3.3.12.0 aktualisiert<<EN

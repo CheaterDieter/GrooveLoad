@@ -1,0 +1,193 @@
+[GrooveLoad Language File]
+HELLO=Bienvenue dans GrooveLoad
+GR_GUI_DOWNLOADLIST=Téléchargements
+GR_GUI_SEARCH=Recherche
+GR_GUI_SETTINGS=Paramètres
+GR_GUI_ABOUT=À propos
+GR_GUI_DOWNLOAD=Télécharger
+GR_GUI_REMOVESELECTED=Supprimer la sélection
+GR_GUI_SELECTION=Sélection...
+GR_GUI_EXPORTDLLIST=Exporter la liste des téléchargements
+GR_GUI_IMPORTDLLIST=Importer une liste de téléchargements
+GR_GUI_MANUALCS=Recherche de couverture
+GR_GUI_INPUTTEXT=Termes de la recherche
+GR_GUI_ADDTODLLIST=Ajouter aux téléchargements
+GR_GUI_RMVDUPLICATES=Supprimer les titres en double
+GR_GUI_BATCH=Traitement en masse
+GR_GUI_POPULAR=Chansons populaires
+GR_GUI_CONNECTION=Paramètres de connexion
+GR_GUI_DLSETTINGS=Paramètres de téléchargement
+GR_GUI_RESET=Réinitialiser le programme
+GR_GUI_LNG=Langue
+GR_GUI_SHORTCUT=Créer un raccourci GrooveLoad sur le bureau
+GR_GUI_COPYRIGHT=GrooveLoad version [%] par Cheater Dieter (Autoit.de)
+GR_GUI_ABOUTTEXT=Remerciements spéciaux:[CRLF]- StevenX (Autoit.de) - conception d'icônes, mise en forme de la recherche de couverture, traduction[CRLF]- lesolutionneur (Autoit.de) - traduction française[CRLF]- Tous qui me donner votre avis. Merci =)[CRLF][CRLF]Composants de tierce-partie utilisés dans ce programme :[CRLF] WinHTTP.au3 - Dragana R.[CRLF]Bass.au3 - Brett Francis[CRLF]MetaMP3 v0.91 - Tycho (Informations relatives au droit d'auteur disponibles dans le dossier Data\metamp3\)[CRLF]xMsgBox.au3 - Prog@ndy (AutoIt.de) et Pacific Database Pty Limited[CRLF]7za.exe - Igor Pavlov[CRLF]ScaleImage - UEZ (AutoIt.de)[CRLF]_GUICtrlProgressSetMarquee() - Bob Anthony
+GR_GUI_GERMANY=Utiliser Grooveshark en Allemagne
+GR_GUI_FEEDBACK=Faire remonter vos impressions
+GR_GUI_RECONNECT=Reconnecter
+GR_GUI_SEARCHGUI=Résultats de recherche
+GR_GUI_SELECTALL=Tout sélectionner
+GR_GUI_UNSELECTALL=Ne rien sélectionner
+GR_GUI_INVERTSELECTION=Inverser la sélection
+GR_GUI_ALBUMSEARCH=Rechercher l'album
+GR_GUI_ARTISTSEARCH=Rechercher l'artiste
+GR_GUI_PREVIEW=Prévisualisation
+GR_GUI_SHARE=Partager
+GR_GUI_STILLDLHEADLINE=allusion
+GR_GUI_STILLDL=Il y a encore des chansons dans la liste des téléchargements
+ 
+GR_DLGUI_PATH=Dossier de destination pour les téléchargements
+GR_DLGUI_BROWSE=Modifier le dossier
+GR_DLGUI_NAMES=Règle pour le nommage et le tri des fichiers téléchargés :
+GR_DLGUI_NAMESTEXT=Avec l'option "Motif pour le nommage et le trie des fichiers téléchargés", vous pouvez également trier les fichiers téléchargés par sous-dossier dans le dossier de destination. Spécifiez un nom de fichier relatif au dossier de destination avec les variables <Title>, <Artist> et <Album>.&Voici quelques exemples :[CRLF][CRLF]Exemple 1:[CRLF]Destination : C:\music[CRLF]Motif de nommage : <Artist>\<Title>&Les fichiers vont être sauvegardés de manière triée par artiste dans le dossier de destination. La chanson "Yesterday" des Beatles sera dans le dossier C:\music\The Beatles\Yesterday.mp3[CRLF][CRLF]Exemple 2 :[CRLF]Destination : C:\music[CRLF]Motif de nommage : <Artist>\<Album>\<Artist> - <Title>[CRLF]La chanson "Yesterday" des Beatles de l'album "Help!" sera dans le dossier C:\music\The Beatles\Help!\The Beatles - Yesterday.mp3.
+GR_DLGUI_TITLE=Titre
+GR_DLGUI_ARTIST=Artiste
+GR_DLGUI_ALBUM=Album
+GR_DLGUI_USABLE=Utilisable
+GR_DLGUI_RESET=Réinitialiser
+GR_DLGUI_SAVE=Sauvegarder
+GR_DLGUI_AFTER=Après le téléchargement :
+GR_DLGUI_EXPLORER=Ouvrir le dossier de téléchargement dans l'explorateur Windows
+GR_DLGUI_PLAYLIST=Créer une liste de lecture des chansons téléchargées
+GR_DLGUI_PLAYLISTTEXT=Une liste de lecture permet d'importer les fichiers MP3 téléchargés dans des logiciels comme Itunes plus simplement. La liste de lecture sera créée au format m3u dans le dossier de téléchargement, et son nom sera la date et l'heure des téléchargements.
+GR_DLGUI_MP3TAG=Ouvrir le dossier de téléchargements dans Mp3Tag
+GR_DLGUI_MP3TAGTEXT=Mp3Tag est un gratuiciel permettant d'éditer les informations sauvegardées dans les fichiers MP3 (appelées ID3 Tags). Mp3Tag devra être installé, et le chemin de l'installation renseigné pour utiliser cette option.
+GR_DLGUI_MP3TAGPATH=Chemin vers Mp3Tag
+GR_DLGUI_NOTSPECIFIED=Non spécifié
+GR_DLGUI_MP3TAGDL=Cliquez ici pour télécharger Mp3Tag
+GR_DLGUI_MORE=Autres paramètres :
+GR_DLGUI_COVER=Télécharger les pochettes d'album des fichiers MP3.
+GR_DLGUI_COVERTEXT=Grooveshark dispose rarement des pochettes d'album. Cette option vous permet de les ajouter après. GrooveLoad va les rechercher sur Grooveshark, iTunes et Amazon. Dans presque tous les cas, la pochette d'album sera trouvée. Vous pouvez ensuite choisir que faire avec la pochette d'album.
+GR_DLGUI_COVERMP3=Intégrer la pochette dans le fichier MP3
+GR_DLGUI_COVERJPG=Sauvegarder la pochette en tant que fichier JPG
+GR_DLGUI_COVERMP3JPG=Intégrer la pochette dans le fichier MP3 et la sauvegarder en tant que fichier JPG
+GR_DLGUI_NAMEEXIST=Si le nom de fichier existe déjà...
+GR_DLGUI_DIFFERENTNAME=Sauvegarder le fichier sous un autre nom
+GR_DLGUI_OVERWRITE=Écraser le fichier existant
+GR_DLGUI_RULEMISSING=Aucune règle de nommage n'a été fournie.
+GR_DLGUI_MP3TAGPATHMISSING=Le chemin de Mp3Tag n'est pas spécifié. Spécifiez-le ou désactivez l'option.
+GR_DLGUI_NEWPATH=Ouvrir le dossier de destination.
+ 
+GR_MSG_CONNECTION=Connexion à Grooveshark établie.
+GR_MSG_32BIT=Veuillez lancer le programme en tant que programme 32 bits.
+GR_MSG_ALREADYRUNNING=GrooveLoad est déjà en cours d'exécution.
+GR_MSG_DISCLAIMER=Utilisez le programme à vos risques et périls. En l'utilisant, vous transgressez probablement le droit d'auteur des ayants droit. L'auteur de ce logiciel ne peut être tenu pour responsable des dommages éventuels occasionnés par ce logiciel (par exemple erreurs de programmation). Ce logiciel est soumis aux droits d'auteur allemands.
+GR_MSG_ACCEPT=Cliquez sur OK si vous acceptez ces conditions. Dans le cas contraire, cliquez sur Annuler.
+GR_MSG_DISAGREE=Vous avez accepté les conditions d'utilisation de ce programme. Voulez-vous regarder une vidéo de chat ?
+GR_MSG_GERMANIP=Vous accédez à Grooveshark avec une IP allemande, il est donc impossible de télécharger quoi que ce soit. Toutefois, vous pouvez utiliser une fausse IP étrangère dans Paramètres -> Connexion avec un serveur proxy ou un entête X-FORWARD falsifiée.
+GR_MSG_ERRORSESSIONID=Erreur lors de la requête de l'ID de session et du jeton de communication.
+GR_MSG_REFRESH=Renouvellement du bail...
+GR_MSG_SECRETWORD=Grooveshark a apparemment modifié son site. En effet le "mot secret" pour la création de la clé ne semble pas fonctionner. Sans ce nouveau "mot secret", le programme le peut pas fonctionner.
+GR_MSG_SEARCHERROR=Erreur lors de la recherche
+GR_MSG_STREAMDATAERROR=Erreur lors du téléchargement du flux de données.
+GR_MSG_RECONNECT=Reconnexion...
+GR_MSG_NEWCONNECTION=Nouvelle connexion
+GR_MSG_EMPTY=La liste de téléchargement ne contient actuellement aucune musique
+GR_MSG_NOTHINGFOUND=Aucun résultat pour
+GR_MSG_ADDTODLL=a été ajouté à la liste des téléchargements
+GR_MSG_ADDTODLLMORE=titres ont été ajoutés à la liste des téléchargements
+GR_MSG_STREAMDATA=Détermination du flux de données...
+GR_MSG_TRYRELOAD=Nouvelle tentative de téléchargement du flux de données...
+GR_MSG_CANNOTDOWNLOAD=ne peut être téléchargé et sera donc omit
+GR_MSG_DOWNLOAD=Téléchargement de
+GR_MSG_SIZE=Taille des données
+GR_MSG_TIME=Temps de téléchargement
+GR_MSG_SEC=Secondes
+GR_MSG_COVERSEARCH=Recherche de pochette pour [%] sur iTunes...
+GR_MSG_ITUNESERROR=Recherche de pochette sur iTunes infructueuse, recherche sur Amazon...
+GR_MSG_COVERERROR=Aucune pochette n'a été trouvée.
+GR_MSG_COVERDL=Téléchargement de la pochette de [%] depuis Grooveshark...
+GR_MSG_DLERROR=Téléchargement échoué
+GR_MSG_DLFINISHED=Téléchargement terminé
+GR_MSG_NOTEMPTY=Certains titres présents dans la liste de téléchargements n'ont pu être téléchargés. Souhaitez-vous sauvegarder la liste de téléchargement pour qu'elle soit disponible au prochain lancement du programme ?
+ 
+GR_CONN_PROXY=Utiliser un serveur proxy
+GR_CONN_CHECK=Tester la connexion
+GR_CONN_X=Utiliser une IP X-FORWARDED-FOR
+GR_CONN_XTEXT=Le blocage des IP allemandes sur Grooveshark peut être outrepassé en envoyant un entête "X-FORWARDED-FOR". Pour Grooveshark, la requête semble alors provenir d'Angleterre (par défaut) et passer par un proxy allemand avec votre IP - Grooveshark autorise alors la requête. Vous devez spécifier les 3 premiers blocs de l'entête X-FORWARDED-FOR IP, le quatrième est généré se manière aléatoire. Si vous utilisez un serveur proxy, cette option peut généralement être désactivée car les serveurs proxy ne fournissent souvent pas cet entête au serveur de destination.
+GR_CONN_IPTEXT=Fournir les 3 premiers blocs de l'IP, le dernier va être généré aléatoirement
+GR_CONN_BYTES=Taille d'un bloc en octets. Si ce nombre est trop petit, le téléchargement sera lent et provoquera une forte charge réseau. S'il est trop élevé le programme risque d'être instable.
+GR_CONN_ERROR=La connexion à Grooveshark n'a pu être effectuée.
+GR_CONN_GERMANIP=Vous vous connectez actuellement à Grooveshark avec une IP allemande. Il est donc impossible de télécharger quoi que ce soit depuis Grooveshark. Vous pouvez toutefois utiliser vous faire passer pour une IP étrangère, en paramétrant la connexion à un serveur proxy, ou activant l'envoi d'un entête X-FORWARD falsifiée.
+GR_CONN_ALRIGHT=La connexion à Grooveshark est fonctionnelle.
+GR_CONN_RESTART=Les modifications ont été sauvegardées. Le programme va redémarrer.
+ 
+GR_SHARE_LINK=Lien vers Grooveshark :
+GR_SHARE_REQUESTLINK=Le lien est en cours d'obtention...
+GR_SHARE_COPY=Copier
+GR_SHARE_FACEBOOK=Partager sur Facebook
+GR_SHARE_TWITTER=Partager sur Twitter
+GR_SHARE_ERROR=Erreur lors de l'obtention du lien
+ 
+GR_LNG_CURRENT=Langue actuellement utilisée :
+GR_LNG_CHANGE=Changer
+ 
+GR_FEEDBACK_DESCRIPTION=Si vous voulez remercier, vous plaindre ou proposer des suggestions, vous pouvez me contacter facilement avec le formulaire de retour suivant.
+ 
+GR_TUT_NEXT=Suivant
+GR_TUT_BACK=Précédent
+GR_TUT_FINISH=Terminer
+GR_TUT_1=Bienvenue sur GrooveLoad. Ce petit tutoriel va vous apprendre à utiliser GrooveLoad.
+GR_TUT_2=Entrez les termes de votre recherche puis cliquez sur la loupe, ou cliquez sur le ballon orange pour afficher les chansons populaires.
+GR_TUT_3=Lorsque vous cliquez avec le bouton droit sur un résultat de recherche, vous avez la possibilité de faire une recherche d'album ou d'artiste. Vous pouvez également partager le lien sur Facebook, Twitter, etc., et prévisualiser la musique avant de la télécharger.
+GR_TUT_4=Une fois que vous avez décidé de télécharger une musique, double-cliquez dessus, ou sélectionnez-la en cliquant sur la case puis cliquez sur "Envoyer vers la liste de téléchargements".
+GR_TUT_5=En cliquant sur "Téléchargements" dans le panneau à gauche, vous verrez toutes les chansons qui sont en attente de téléchargement.
+GR_TUT_6=Mais avant de télécharger, il vaut mieux paramétrer si les pochettes d'album doivent être automatiquement téléchargées et incorporées dans les fichiers MP3 ou non. Vous pouvez configurer ceci dans les paramètres de télécharger. Cliquez sur le bouton ci-dessous pour l'ouvrir.
+GR_TUT_7=Vous avez terminé le tutoriel, et pouvez à présent télécharger votre première chanson. Pour ce faire, cliquez sur le bouton "Télécharger". Il ne nous reste plus qu'à vous souhaiter beaucoup de plaisir à écouter de la musique !
+ 
+GR_EXP_FILE=Destination pour la liste des téléchargements
+GR_EXP_SUCCESS=La liste des téléchargements a été exportée avec succès
+ 
+GR_IMP_SELECT=Choisir une liste de téléchargements
+GR_IMP_WAIT=La liste de téléchargements est en cours d'importation...
+GR_IMP_STOP=Annuler
+ 
+GR_AUTO_TEXT=Vous pouvez ci-dessous entrer une série de noms de chanson ou termes de recherche qui seront traités ligne par ligne. Vous pouvez également fournir des liens Spotify. Vous pouvez les obtenir en sélectionnant un titre dans Spotify puis en appuyant simultanément sur les touches Ctrl et C.
+GR_AUTO_START=Démarrer la recherche
+GR_AUTO_SEARCH=Le titre est en cours de recherche...
+GR_AUTO_FINISH=Les titres seront ajoutés à la liste des téléchargements dès qu'ils seront trouvés.
+ 
+GR_SHORTCUT_TEXT=Un raccourci sur le bureau a été créé.
+ 
+GR_RESET_SURE=Voulez-vous vraiment réinitialiser le programme à ses paramètres d'origine ? Tous les paramètres, fichiers log et sauvegardes de la liste des téléchargements seront supprimés !
+GR_RESET_RESTART=Le programme va être réinitialisé et fermé. Voulez-vous le redémarrer ensuite ?
+ 
+GR_IPFUCK_DESCRIBTION=Grooveshark n'est pas disponible pour les utilisateurs allemands. L'installation de l'extension IPFuck permet de contourner cette restriction sans utiliser de serveur proxy. Cette extension falsifie les entêtes HTTP en envoyant une fausse IP dans l'entête X-FORWARDED_FOR. De cette manière, il est possible d'utiliser Grooveshark en Allemagne sans serveur proxy.
+GR_IPFUCK_LINK=Télécharger IPFuck pour
+ 
+GR_UPDATE_AVAILABLE=Une mise à jour de GrooveLoad est disponible.
+GR_UPDATE_VERSION=Version actuelle :
+GR_UPDATE_NEWVERSION=Nouvelle version :
+GR_UPDATE_AUTO=Mise à jour automatique (recommandé)
+GR_UPDATE_MANUALLY=Téléchargement manuel
+GR_UPDATE_LATER=Redemander plus tard
+GR_UPDATE_HEADLINE=Nouveautés dans GrooveLoad
+GR_UPDATE_CHANGELOG=Voir les notes de version de toutes les versions (disponible uniquement en allemand)
+GR_UPDATE_SUCCESS=GrooveLoad a été mis à jour vers la version [%] avec succès.
+ 
+GR_FINALREPORT_TEXT=Le téléchargement est terminé.
+GR_FINALREPORT_MARK=Sélectionner le titre
+GR_FINALREPORT_PLAY=Lire
+GR_FINALREPORT_DIRECTORY=Ouvrir le dossier
+GR_FINALREPORT_COVER=Modifier la pochette
+GR_FINALREPORT_MP3TAG=Ouvrir dans MP3Tag
+GR_FINALREPORT_EXIT=Fermer
+GR_FINALREPORT_COVERPIC=Pochette d'album
+GR_FINALREPORT_STORAGELOCATION=Répertoire de destination
+GR_FINALREPORT_ERROR=Erreur lors du téléchargement du titre.
+ 
+CS_TITLE=GrooveLoad Recherche de pochette d'album
+CS_SEARCHTEXT=Spécifiez des termes de recherche, les pochettes correspondantes vont s'afficher.
+CS_SEARCHAT=Rechercher sur
+CS_SEARCH=Rechercher
+CS_SEARCH_OWNCOVER=Propre pochette
+CS_SEARCHERROR=Erreur lors du téléchargement de l'image
+CS_MP3ADD=Intégrer la pochette dans les données du MP3
+CS_SAVE=Sauvegarder la pochette
+CS_STORAGELOCATION=Choisir le dossier de sauvegarde
+CS_TEXT=Vous devez choisir un fichier MP3 et une image JPG, cette dernière sera intégrée au fichier MP3 en tant que pochette d'album.
+CS_SELECTMP3=Choisir un fichier MP3
+CS_PICTURE=Choisir une image
+CS_FINISH=La pochette a été intégrée au fichier MP3.
+CS_SHURE=Êtes-vous sûr de vouloir utiliser le fichier[%]en tant que nouvelle pochette ? L'ancienne sera alors écrasée.
+CS_ABOUT=GrooveLoad Recherche de pochette d'album est un composant de GrooveLoad. Ce programme permet de trouver une pochette d'album correspondant à un titre recherché. Elle peut ensuite être intégrée aux fichiers MP3.[CRLF]Pour démarrer GrooveLoad Recherche de pochette d'album sans ouvrir GrooveLoad, lancez le fichier "Cover.vbs" depuis le dossier "Data".
