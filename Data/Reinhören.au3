@@ -47,7 +47,7 @@ $header = _WinHttpQueryHeaders($h_openRequest)
 $dateigroesse = _StringBetween($header, "Content-Length: ", @CRLF)
 If IsArray($dateigroesse) Then $dateigroesse = $dateigroesse[0]
 
-$file = @ScriptDir & "\tmp\" & Random(0,9999999999999,1)&".mp3"
+$file = @ScriptDir & "\tmp\" & Random(0,9999999999999,1)&".tmp"
 Local $data = Binary("")
 FileDelete($file)
 $play = 0
