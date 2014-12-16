@@ -458,7 +458,7 @@ GUICtrlSetImage($icon[1], "Data\ico\1-.ico")
 
 
 ; Erstelle Auswahlmenü Suchergebnisse
-$Suche_GUI = GUICreate(sprache("GR_GUI_SEARCHGUI"), 116, 107, -1, -1, -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_TOPMOST))
+$Suche_GUI = GUICreate(sprache("GR_GUI_SEARCHGUI"), 116, 107, -1, -1, -1, $WS_EX_TOOLWINDOW, $HauptGUI)
 GUISetIcon("Data\icon.ico")
 $Suche_Alle = GUICtrlCreateButton(sprache("GR_GUI_SELECTALL"), 8, 8, 100, 25)
 $Suche_AlleAb = GUICtrlCreateButton(sprache("GR_GUI_UNSELECTALL"), 8, 41, 100, 25)
@@ -466,7 +466,7 @@ $Suche_Umkehren = GUICtrlCreateButton(sprache("GR_GUI_INVERTSELECTION"), 8, 74, 
 
 
 ; Erstelle Auswahlmenü Downloadliste
-$DL_GUI = GUICreate(sprache("GR_GUI_DOWNLOADLIST"), 116, 107, -1, -1, -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_TOPMOST))
+$DL_GUI = GUICreate(sprache("GR_GUI_DOWNLOADLIST"), 116, 107, -1, -1, -1, $WS_EX_TOOLWINDOW, $HauptGUI)
 GUISetIcon("Data\icon.ico")
 $DL_Alle = GUICtrlCreateButton(sprache("GR_GUI_SELECTALL"), 8, 8, 100, 25);T40
 $DL_AlleAb = GUICtrlCreateButton(sprache("GR_GUI_UNSELECTALL"), 8, 41, 100, 25);T41
@@ -912,7 +912,7 @@ While 1
 		Case $GUI_EVENT_CLOSE
 			If $nMsg[1] = $HauptGUI Then
 				If FileExists("Data\DLListe.txt") Then
-					$nachfrage = MsgBox(48 + 3, "GrooveLoad", sprache("GR_MSG_NOTEMPTY"))
+					$nachfrage = MsgBox(65536 + 48 + 3, "GrooveLoad", sprache("GR_MSG_NOTEMPTY"), $HauptGUI)
 					If $nachfrage = 7 Then ;T55
 						FileDelete("Data\DLListe.txt")
 						DirRemove (@ScriptDir & "\Data\tmp\",1)
