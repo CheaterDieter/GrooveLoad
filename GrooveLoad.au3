@@ -51,7 +51,7 @@ DebugWrite ("GrooveLoad " & $version)
 _GDIPlus_Startup()
 FileWrite("Data\test.txt", "Rauchender Tankwart - leuchtendes Beispiel")
 If Not FileExists("Data\test.txt") Then
-	ShellExecute("Data\AutoIt3.exe", '"' & @ScriptDir & '\Data\Admin.au3"')
+	ShellExecute("Data\AutoIt3.exe", '"' & @ScriptDir & '\Data\Admin.au3" "'&@ScriptFullPath&'"')
 	Exit
 EndIf
 FileDelete("Data\test.txt")
