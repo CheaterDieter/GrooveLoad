@@ -799,9 +799,8 @@ While 1
 							$error = 0
 							$StreamIP = $StreamIP[0]
 							$StreamKey = $StreamKey[0]
-							FileDelete("Data\Reinhören.txt")
-							FileWrite("Data\Reinhören.txt", $StreamIP & @CRLF & $StreamKey & @CRLF & $SongInfo[$o][1] & @CRLF & $spieldauer & @CRLF & sprache ("GR_GUI_PREVIEW") & @CRLF & $HauptGUI)
-							ShellExecute ("Data\AutoIt3.exe",'"'&@ScriptDir&'\Data\Reinhören.au3"')
+							
+							ShellExecute ("Data\AutoIt3.exe",'"'&@ScriptDir&'\Data\Reinhören.au3" "'&$StreamIP&'" "'&$StreamKey&'" "'&$SongInfo[$o][1]&'" "'&$spieldauer&'" "'&sprache("GR_GUI_PREVIEW")&'" "'&$HauptGUI&'"')
 						EndIf
 					EndIf
 					If $p = 3 Then

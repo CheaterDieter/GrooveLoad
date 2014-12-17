@@ -9,12 +9,15 @@ FileChangeDir (@ScriptDir)
 ; Wird für die Proxyfunktion benötigt
 Global Const $tagWINHTTP_PROXY_INFO = "DWORD  dwAccessType;ptr lpszProxy;ptr lpszProxyBypass;"
 
-$StreamIP = FileReadLine ("Reinhören.txt",1)
-$StreamKey = FileReadLine ("Reinhören.txt",2)
-$Musiktitel = FileReadLine ("Reinhören.txt",3)
-$Spieldauer = FileReadLine ("Reinhören.txt",4)
-$Fenstertitel = FileReadLine ("Reinhören.txt",5)
-$HauptGUI = FileReadLine ("Reinhören.txt",6)
+If $cmdline[0] <> 6 Then
+	Exit
+EndIf
+$StreamIP= $cmdline[1]
+$StreamKey = $cmdline[2]
+$Musiktitel = $cmdline[3]
+$Spieldauer = $cmdline[4]
+$Fenstertitel= $cmdline[5]
+$HauptGUI = $cmdline[6]
 $Dateigroesse = "-1"
 
 If $StreamIP = "" Or $StreamKey = "" Then
@@ -30,7 +33,6 @@ If IniRead ("config.ini","X-FORWARDED-FOR","FORWARDED_nutzen","1") = 1 Then
 Else
 	$FakeIP = ""
 EndIf
-FileDelete ("Reinhören.txt")
 
 $timer = TimerInit ()
 $hDLOpen = _WinHttpOpen("")
