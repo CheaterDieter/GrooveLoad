@@ -9,7 +9,7 @@ $pTemp = '..\Config\Temp\'
 $pButton = '..\Assets\Buttons\'
 $eBassDLL = '.\Dependencies\Bass\bass.dll'
 
-$exitfile = FileOpen ($pTemp = $pTemp & "Reinhören beenden",2+8)
+$exitfile = FileOpen ($pTemp & "Reinhören beenden",2+8)
 FileWrite ($exitfile,$random)
 FileClose ($exitfile)
 
