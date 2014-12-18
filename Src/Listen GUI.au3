@@ -1,11 +1,15 @@
 #NoTrayIcon
-#include "Bass\Bass.au3"
+#include "Dependencies\Bass\Bass.au3"
 #include <WindowsConstants.au3>
 #include <Crypt.au3>
 
 $random = Random(0,9999999999999,1)
 
-$exitfile = FileOpen (@ScriptDir & "\tmp\Reinhören beenden",2+8)
+$pTemp = '..\Config\Temp\'
+$pButton = '..\Assets\Buttons\'
+$eBassDLL = '.\Dependencies\Bass\bass.dll'
+
+$exitfile = FileOpen ($pTemp = $pTemp & "Reinhören beenden",2+8)
 FileWrite ($exitfile,$random)
 FileClose ($exitfile)
 
@@ -29,8 +33,8 @@ $Player = GUICreate($Fenstertitel, 330, 75, 0, 0, -1, $WS_EX_TOOLWINDOW + $WS_EX
 GUISetBkColor(0xFFFFFF)
 $Wasspielt = GUICtrlCreateLabel($Musiktitel, 13, 8, 308, 23)
 GUICtrlSetFont(-1, 12, 800, 0, "Arial")
-$PLAYPAUSE = GUICtrlCreatePic("Pause.jpg", 8, 27, 36, 36)
-$Player_Stopp = GUICtrlCreatePic("Stop.jpg", 56, 27, 36, 36)
+$PLAYPAUSE = GUICtrlCreatePic($pButton & "Pause.jpg", 8, 27, 36, 36)
+$Player_Stopp = GUICtrlCreatePic($pButton & "Stop.jpg", 56, 27, 36, 36)
 $MP3Infos = GUICtrlCreateLabel("", 104, 38, 215, 17, 0x0002)
 $ProgressPlayer = GUICtrlCreateProgress(0, 65, 330, 10)
 DllCall("UxTheme.dll", "int", "SetWindowTheme", "hwnd", GUICtrlGetHandle($ProgressPlayer), "wstr", "", "wstr", "") ;Jetzt per DLL-Call das Windows Theme umstellen
@@ -39,7 +43,7 @@ GUICtrlSetBkColor($ProgressPlayer, 0xFFFFFF) ;Die Hintergrundfarbe
 GUICtrlSetStyle(-1, 0x00000008)
 _GUI_ProgressAn()
 GUISetState(@SW_SHOW)
-_BASS_STARTUP("Bass\bass.dll")
+_BASS_STARTUP($eBassDLL)
 ;Initalize bass.  Required for most functions.
 _BASS_Init(0, -1, 44100, 0, "")
 ;Check if bass iniated.  If not, we cannot continue.
@@ -109,12 +113,12 @@ While 1
 	If $iMsg = $PLAYPAUSE Then
 		If $pause = False Then
 			$pause = True
-			GUICtrlSetImage($PLAYPAUSE, "Play.jpg")
+			GUICtrlSetImage($PLAYPAUSE, $pButton & "Play.jpg")
 			_BASS_Pause()
 			$pausentimer = TimerInit()
 		Else
 			$pause = False
-			GUICtrlSetImage($PLAYPAUSE, "Pause.jpg")
+			GUICtrlSetImage($PLAYPAUSE, $pButton & "Pause.jpg")
 			_BASS_Start()
 			$vonlaufzeitabziehen = $vonlaufzeitabziehen + TimerDiff($pausentimer)
 		EndIf
@@ -122,15 +126,15 @@ While 1
 WEnd
 
 Func Checkexit ()
-	If FileExists (@ScriptDir & "\tmp\Reinhören beenden") And FileRead (@ScriptDir & "\tmp\Reinhören beenden") <> $random Then
-		FileDelete (@ScriptDir & "\tmp\Reinhören beenden")
+	If FileExists ($pTemp & "Reinhören beenden") And FileRead ($pTemp & "Reinhören beenden") <> $random Then
+		FileDelete ($pTemp &  "Reinhören beenden")
 		If IsDeclared ($MusicHandle) Then _BASS_ChannelStop($MusicHandle)
 		_BASS_Free()
 		ProcessClose($reinhoerenPID)
 		FileDelete ($cmdline[1])
 		Exit
 	Else
-		If FileExists (@ScriptDir & "\tmp\Reinhören beenden") Then FileDelete (@ScriptDir & "\tmp\Reinhören beenden")
+		If FileExists ($pTemp & "Reinhören beenden") Then FileDelete ($pTemp & "Reinhören beenden")
 	EndIf
 EndFunc
 

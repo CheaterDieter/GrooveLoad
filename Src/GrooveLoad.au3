@@ -8,17 +8,20 @@
 
 
 #NoTrayIcon
+
+FileChangeDir(@ScriptDir)
+
 If Not StringInStr($cmdlineraw, "-Dihydrogenmonoxid-") Then
-	ShellExecute(@ScriptDir & "\Data\AutoIt3.exe", '"' & @ScriptDir & '\Data\ErrorHandler.au3"')
+	ShellExecute(".\AutoIt\AutoIt3.exe", ".\ErrorHandler.au3")
 	Exit
 EndIf
 
 $version = "1.8.2.0"
 
-#include "Data\WinHTTP\WinHTTP.au3"
-#include "Data\Bass\Bass.au3"
-#include "Data\Bass\BassConstants.au3"
-#include "Data\xMsgBox\xMsgBox.au3"
+#include "Dependencies\WinHTTP\WinHTTP.au3"
+#include "Dependencies\Bass\Bass.au3"
+#include "Dependencies\Bass\BassConstants.au3"
+#include "Dependencies\xMsgBox\xMsgBox.au3"
 
 #include <Crypt.au3>
 #include <String.au3>
@@ -41,7 +44,40 @@ $version = "1.8.2.0"
 Global $ghGDIPDll
 
 HotKeySet("{F10}", "Absturz")
-FileChangeDir(@ScriptDir)
+
+$eAutoIt = '.\AutoIt\AutoIt3.exe'
+$eMetaMP3 = '.\Dependencies\metamp3\metamp3.exe'
+$e7zip = '.\Dependencies\7za.exe'
+
+$aListenServer = '.\Listen Server.au3'
+
+$nConfig = '..\Config\config.ini'
+$pLanguages = '..\Assets\Languages\'
+$pLog = '..\Config\log.txt'
+$fSecret = '..\Config\geheimwort.txt'
+$fDownloadList = '..\Config\DLListe.txt'
+$pTemp = '..\Config\Temp\'
+$fNew = '..\Config\new.txt'
+$pDownloads = _PathFull(@ScriptDir + '\..\Downloads') ; _PathFull because stored in config file, TODO: check if really needed
+
+$fWhatsNew = '..\Neuerungen.txt'
+
+$fIco = '..\Assets\icon.ico'
+$fSplash = '..\Assets\splash.jpg'
+$pButton = '..\Assets\Buttons\'
+$fKroko = '..\Assets\Großes grünes Krokodil\Großes grünes Krokodil'
+$fIcoKroko = '..\Assets\Großes grünes Krokodil\Großes grünes Krokodil.ico'
+
+$pCover = '..\Assets\Cover\'
+$defaultCover = $pCover & 'default.jpg'
+
+$fListenFile = '..\Config\Reinhören.txt'
+
+
+
+; URL of the support thread
+$threadURL = "http://autoit.de/index.php?page=Thread&threadID=44382"
+
 
 GUICreate("Debug", 400, 150, 0, 0, -1, BitOR($WS_EX_TOOLWINDOW,$WS_EX_WINDOWEDGE))
 $DebugEdit = GUICtrlCreateEdit("", 0, 0, 400, 150)
@@ -49,19 +85,21 @@ $DebugEdit = GUICtrlCreateEdit("", 0, 0, 400, 150)
 DebugWrite ("GrooveLoad " & $version)
 
 _GDIPlus_Startup()
-FileWrite("Data\test.txt", "Rauchender Tankwart - leuchtendes Beispiel")
-If Not FileExists("Data\test.txt") Then
-	ShellExecute("Data\AutoIt3.exe", '"' & @ScriptDir & '\Data\Admin.au3" "'&@ScriptFullPath&'"')
+
+$fTest = "..\Config\test.txt"
+FileWrite($fTest, "Rauchender Tankwart - leuchtendes Beispiel")
+If Not FileExists($fTest) Then
+	ShellExecute($eAutoIt, '.\Admin.au3 .\GrooveLoad.au3')
 	Exit
 EndIf
-FileDelete("Data\test.txt")
+FileDelete($fTest)
 
-$lngfiles = _FileListToArray ("Data\Sprachen\","*.lng",1)
+$lngfiles = _FileListToArray ($pLanguages,"*.lng",1)
 ;_ArrayDisplay ($lngfiles)
 
 
 
-$_sprache = IniRead("Data\config.ini", "Sprache", "Sprache", -1)
+$_sprache = IniRead($nConfig, "Sprache", "Sprache", -1)
 If $_sprache = -1 Then
 	$SpracheGUI = GUICreate("GrooveLoad", 200, 225, -1, -1, -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_TOPMOST))
 	GUISetBkColor (0xFFFFFF)
@@ -74,7 +112,7 @@ If $_sprache = -1 Then
 	$hImage = _GUIImageList_Create(50, 30, 6)
 	$hGraphics = _GDIPlus_GraphicsCreateFromHWND($SpracheGUI) ;Grafik für die GUI erzeugen
 	For $i = 1 To UBound($lngfiles) -1
-		$flagimg = "Data\Sprachen\"&StringReplace ($lngfiles[$i],".lng",".jpg")
+		$flagimg = $pLanguages&StringReplace ($lngfiles[$i],".lng",".jpg")
 
 		$hBitmap = ScaleImage($flagimg, 50, 30)
 		_GUIImageList_Add($hImage, _GDIPlus_BitmapCreateHBITMAPFromBitmap($hBitmap))
@@ -89,7 +127,7 @@ If $_sprache = -1 Then
 		_GUICtrlListView_AddItem($listview, "", $i-1)
 		_GUICtrlListView_AddSubItem($listview, $i-1, StringReplace ($lngfiles[$i],".lng",""), 1)
 	Next
-	GUICtrlSetData ($welcomebutton,IniRead ("Data\Sprachen\" & $lngfiles[1],"GrooveLoad Language File","HELLO","HELLO"))
+	GUICtrlSetData ($welcomebutton,IniRead ($pLanguages & $lngfiles[1],"GrooveLoad Language File","HELLO","HELLO"))
 	GUICtrlSetState ($welcomebutton,$GUI_DISABLE)
 	GUISetState(@SW_SHOW)
 	$markiertalt = ""
@@ -101,7 +139,7 @@ If $_sprache = -1 Then
 			$switchtimer = TimerInit ()
 			$hellotext = $hellotext + 1
 			If $hellotext = UBound ($lngfiles) Then $hellotext = 1
-			GUICtrlSetData ($welcomebutton,IniRead ("Data\Sprachen\" & $lngfiles[$hellotext],"GrooveLoad Language File","HELLO","HELLO"))
+			GUICtrlSetData ($welcomebutton,IniRead ($pLanguages & $lngfiles[$hellotext],"GrooveLoad Language File","HELLO","HELLO"))
 		EndIf
 		$markiert = _GUICtrlListView_GetSelectedIndices($listview)
 		If $markiert <> $markiertalt Then
@@ -110,7 +148,7 @@ If $_sprache = -1 Then
 				GUICtrlSetState ($welcomebutton,$GUI_DISABLE)
 			Else
 				$switch = False
-				GUICtrlSetData ($welcomebutton,IniRead ("Data\Sprachen\" & $lngfiles[$markiert+1],"GrooveLoad Language File","HELLO","HELLO"))
+				GUICtrlSetData ($welcomebutton,IniRead ($pLanguages & $lngfiles[$markiert+1],"GrooveLoad Language File","HELLO","HELLO"))
 				GUICtrlSetState ($welcomebutton,$GUI_ENABLE)
 			EndIf
 			$markiertalt = $markiert
@@ -118,12 +156,12 @@ If $_sprache = -1 Then
 		$msg = GUIGetMsg()
 		If $msg = -3 Then Exit
 		If $msg = $welcomebutton Then
-			IniWrite("Data\config.ini", "Sprache", "Sprache", StringReplace ($lngfiles[$markiert+1],".lng",""))
+			IniWrite($nConfig, "Sprache", "Sprache", StringReplace ($lngfiles[$markiert+1],".lng",""))
 			ExitLoop
 		EndIf
 	WEnd
 	GUIDelete($SpracheGUI)
-	$_sprache = IniRead("Data\config.ini", "Sprache", "Sprache", -1)
+	$_sprache = IniRead($nConfig, "Sprache", "Sprache", -1)
 EndIf
 
 
@@ -137,9 +175,9 @@ If _Singleton("GrooveLoad " & _Crypt_HashData(@ScriptDir, $CALG_MD5), 1) = 0 The
 	Exit
 EndIf
 
-If IniRead("Data\config.ini", "Nutzungsbedingungen", "Akzeptiert", "") <> 1 Then
+If IniRead($nConfig, "Nutzungsbedingungen", "Akzeptiert", "") <> 1 Then
 	If MsgBox(48 + 1 + 256, "GrooveLoad", sprache("GR_MSG_DISCLAIMER") & @CRLF & sprache("GR_MSG_ACCEPT")) = 1 Then ; Text 3 &@crlf& Text 4
-		IniWrite("Data\config.ini", "Nutzungsbedingungen", "Akzeptiert", 1)
+		IniWrite($nConfig, "Nutzungsbedingungen", "Akzeptiert", 1)
 	Else
 		If MsgBox(4, "GrooveLoad", sprache("GR_MSG_DISAGREE")) = 6 Then ShellExecute("https://www.youtube.com/watch?v=jI-kpVh6e1U") ; Text 5
 		Exit
@@ -147,8 +185,8 @@ If IniRead("Data\config.ini", "Nutzungsbedingungen", "Akzeptiert", "") <> 1 Then
 
 EndIf
 
-If FileGetSize("Data\log.txt") / 1048576 > 3 Then FileDelete("Data\log.txt")
-$loghandle = FileOpen("Data\log.txt", 1)
+If FileGetSize($pLog) / 1048576 > 3 Then FileDelete($pLog)
+$loghandle = FileOpen($pLog, 1)
 OnAutoItExitRegister("ende")
 _Log("Programmstart")
 
@@ -156,8 +194,8 @@ _Log("Programmstart")
 ; Wenn die Variable $Proxy den Wert True besitzt, wird eine Proxy für die Kommunikation mit Grooveshark verwendet.
 ; Die Variable $ProxyIP gibt die IP und den Port der Proxy an
 $Proxy = False
-If IniRead("Data\config.ini", "Proxy", "Proxy_nutzen", "4") = 1 Then $Proxy = True
-$ProxyIP = IniRead("Data\config.ini", "Proxy", "Proxy_IP", "")
+If IniRead($nConfig, "Proxy", "Proxy_nutzen", "4") = 1 Then $Proxy = True
+$ProxyIP = IniRead($nConfig, "Proxy", "Proxy_IP", "")
 _Log("Proxy Funktion: " & $Proxy)
 _Log("Proxy IP: " & $ProxyIP)
 DebugWrite("Proxy Funktion: " & $Proxy)
@@ -185,9 +223,9 @@ $nilpferd = 0
 $nixgefundentimer = ""
 
 $Ladebildschirm = GUICreate("", 418, 227, -1, -1, $WS_POPUP)
-GUISetIcon("Data\icon.ico")
+GUISetIcon($fIco)
 GUISetBkColor(0xFFFFFF)
-GUICtrlCreatePic("Data\logo.jpg", 0, 0, 418, 227)
+GUICtrlCreatePic($fSplash, 0, 0, 418, 227)
 GUICtrlCreateLabel($version, 375, 5)
 GUICtrlSetFont(-1, 8, 400, 0, "Arial")
 GUICtrlSetColor(-1, 0xFFFFFF)
@@ -196,22 +234,19 @@ WinSetTrans($Ladebildschirm, $Ladebildschirm, 0)
 GUISetState(@SW_SHOW)
 _FadeIn($Ladebildschirm)
 
-If IniRead("Data\config.ini", "Erster Start", "Einführung", 0) = 0 Then
+If IniRead($nConfig , "Erster Start", "Einführung", 0) = 0 Then
 	; Entfernen zukünftiger Sicherheitsabfragen
 	$sUnknownZoneIdentifier = "Zone.Identifier"
 
-	$file = @ScriptDir & "\Data\AutoIt3.exe"
-	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
-	$file = @ScriptDir & "\Data\metamp3\metamp3.exe"
-	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
-	$file = @ScriptDir & "\Data\7za.exe"
-	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
+	If _ADS_Exists($eAutoIt, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
+	If _ADS_Exists($eMetaMP3, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
+	If _ADS_Exists($e7zip, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
 EndIf
 
 ; -----Geheimwort Abfrage + Check der Versionsnummer
 ;
 ; Das "Geheimwort" wird zur Erstellung des Token benötigt, es wird von Zeit zu Zeit geändert, das jeweils aktuelle ist
-; zu finden unter http://www.scilor.com/grooveshark/xml/GrooveFix.xml (unter "htmlshark") oder kann in der Datei
+; zu finden unter  (unter "htmlshark") oder kann in der Datei
 ; http://grooveshark.com/JSQueue.swf gefunden werden. Hierzu muss die Datei mit bspw. showmycode.com decompiliert werden.
 ; Anschließend kann das "Geheimwort" in der Variable "secretKey:string" eingesehen werden. Das Geheimwort wird
 ; normalerweise automatisch aktualisisiert.
@@ -232,9 +267,9 @@ Until @error
 ;MsgBox (0,"",$data)
 $importantmsg = ""
 If $data <> "" Then
-	FileDelete("Data\geheimwort.txt")
+	FileDelete($fSecret)
 	$geheimwortdl = _StringBetween($data, "<sword>", "</sword>")
-	If IsArray($geheimwortdl) Then FileWrite("Data\geheimwort.txt", $geheimwortdl[0])
+	If IsArray($geheimwortdl) Then FileWrite($fSecret, $geheimwortdl[0])
 	$importantmsg = _StringBetween($data, "<msg>", "</msg>")
 	If IsArray($importantmsg) Then $importantmsg = $importantmsg[0]
 	$versiondownload = _StringBetween($data, "<ver>", "</ver>")
@@ -252,7 +287,7 @@ If $data <> "" Then
 		If $versionfulldl > $versionfull Then
 			$updategui = GUICreate("GrooveLoad", 266, 177, -1, -1, -1, -1, $Ladebildschirm)
 			GUISetBkColor(0xFFFFFF)
-			GUICtrlCreateIcon("Data\icon.ico", -1, 8, 8, 32, 32)
+			GUICtrlCreateIcon($fIco, -1, 8, 8, 32, 32)
 			GUICtrlCreateLabel(sprache("GR_UPDATE_AVAILABLE"), 48, 8, 200, 17)
 			GUICtrlCreateLabel(sprache("GR_UPDATE_VERSION") & " " & $version, 48, 24, 200, 17)
 			GUICtrlCreateLabel(sprache("GR_UPDATE_NEWVERSION") & " " & $versiondownload[0], 48, 40, 200, 17)
@@ -270,13 +305,13 @@ If $data <> "" Then
 						GUIDelete()
 						ExitLoop
 					Case $Button2
-						ShellExecute("http://autoit.de/index.php?page=Thread&threadID=44382")
+						ShellExecute($threadURL)
 						GUIDelete()
 						ExitLoop
 					Case $Button1
-						If FileExists("Data\new.txt") Then FileDelete("Data\new.txt")
-						FileWrite("Data\new.txt", $versiondownload[0])
-						ShellExecute("Data\AutoIt3.exe", '"' & @ScriptDir & '\Data\updater.au3"')
+						If FileExists($fNew) Then FileDelete($fNew)
+						FileWrite($fNew, $versiondownload[0])
+						ShellExecute($eAutoIt, '.\Updater.au3')
 						Exit
 				EndSwitch
 			WEnd
@@ -286,15 +321,15 @@ Else
 	DebugWrite ("Geheimwort Abfrage und Versionscheck fehlgeschlagen")
 EndIf
 _WinHttpCloseHandle($hOpen)
-$Geheimwort = FileRead("Data\geheimwort.txt")
+$Geheimwort = FileRead($fSecret)
 If $Geheimwort = "" Then $Geheimwort = "nuggetsOfBaller"
 _Log("Geheimwort: " & $Geheimwort)
 DebugWrite ("Geheimwort: " & $Geheimwort)
 ; -----Geheimwort Abfrage und Versionscheck Ende
 $FakeIP = ""
 
-If IniRead("Data\config.ini", "X-FORWARDED-FOR", "FORWARDED_nutzen", "1") = 1 Then
-	$FakeIP = "X-FORWARDED-FOR: " & IniRead("Data\config.ini", "X-FORWARDED-FOR", "FORWARDED_IP", "81.158.166.") & Random(100, 255, 1)
+If IniRead($nConfig, "X-FORWARDED-FOR", "FORWARDED_nutzen", "1") = 1 Then
+	$FakeIP = "X-FORWARDED-FOR: " & IniRead($nConfig, "X-FORWARDED-FOR", "FORWARDED_IP", "81.158.166.") & Random(100, 255, 1)
 Else
 	$FakeIP = ""
 EndIf
@@ -350,7 +385,7 @@ $seitentext[2] = sprache("GR_GUI_SETTINGS")
 $seitentext[3] = sprache("GR_GUI_ABOUT")
 
 $HauptGUI = GUICreate("GrooveLoad", $iW, $iH)
-GUISetIcon("Data\icon.ico")
+GUISetIcon($fIco)
 GUISetBkColor(0xFFFFFF)
 
 $groovelabel = GUICtrlCreateLabel("GrooveLoad", 48, 8, $iW - 56, 32, $SS_CENTERIMAGE)
@@ -358,7 +393,7 @@ GUICtrlSetFont(-1, 14, 800, 0, "Arial", 5)
 GUICtrlSetColor(-1, 0x444444)
 
 $grooveicon = GUICtrlCreateIcon("", -1, 8, 8, 32, 32)
-GUICtrlSetImage($grooveicon, "Data\icon.ico")
+GUICtrlSetImage($grooveicon, $fIco)
 
 GUICtrlCreateLabel("", 0, $iT, $iW, 2, $SS_SUNKEN);separator
 GUICtrlCreateLabel("", $iLeftWidth, $iT + 2, 2, $iH - $iT - $iB - 2, $SS_SUNKEN);separator
@@ -382,7 +417,7 @@ Dim $icon[UBound($seitentext)]
 For $i = 0 To UBound($seitentext) - 1
 	$Link[$i] = GUICtrlCreateLabel($seitentext[$i], 36 + 10, $iT + $iGap + 8, $iLeftWidth - 46, 17)
 	GUICtrlSetCursor(-1, 0)
-	$icon[$i] = GUICtrlCreateIcon("Data\ico\" & $i & ".ico", -1, 10, $iT + $iGap, 32, 32)
+	$icon[$i] = GUICtrlCreateIcon($pButton & $i & ".ico", -1, 10, $iT + $iGap, 32, 32)
 	$iGap += 22 + 16
 Next
 
@@ -410,7 +445,7 @@ $manuell_Cover = GUICtrlCreateButton(sprache("GR_GUI_MANUALCS"), 586, 123, 150, 
 _AddControlsToPanel($Pannel[1])
 $GUI_EingabeSuche = GUICtrlCreateInput("", 8, 350, 457, 21)
 GUICtrlSendMsg($GUI_EingabeSuche, 0x1501, 0, sprache("GR_GUI_INPUTTEXT"))
-$GUI_ButtonSuche = GUICtrlCreateIcon("Data\ico\1.ico", -1, 470, 350 - 5, 32, 32)
+$GUI_ButtonSuche = GUICtrlCreateIcon($pButton & '1.ico', -1, 470, 350 - 5, 32, 32)
 GUICtrlSetCursor(-1, 0)
 GUICtrlSetTip(-1, sprache("GR_GUI_SEARCH"))
 $GUI_ListeSuchergebnisse = GUICtrlCreateListView(sprache("GR_DLGUI_TITLE")&"|"&sprache("GR_DLGUI_ARTIST")&"|"&sprache("GR_DLGUI_ALBUM"), 8, 8, 570, 305, BitOR($GUI_SS_DEFAULT_LISTVIEW, $WS_BORDER), $LVS_EX_CHECKBOXES + $LVS_EX_FULLROWSELECT)
@@ -423,7 +458,7 @@ $GUI_Doppeltloeschen = GUICtrlCreateButton(sprache("GR_GUI_RMVDUPLICATES"), 586,
 GUICtrlCreateLabel("", 586, 115, 150, 2, $SS_SUNKEN);separator
 $GUI_Stapelverarbeitung = GUICtrlCreateButton(sprache("GR_GUI_BATCH"), 586, 123, 150, 25)
 _GUICtrlListView_SetColumnWidth($GUI_ListeSuchergebnisse, 0, 175)
-$GUI_ButtonBeliebteLieder = GUICtrlCreateIcon("Data\ico\fav.ico", -1, 470 + 40, 350 - 5, 32, 32)
+$GUI_ButtonBeliebteLieder = GUICtrlCreateIcon($pButton &'fav.ico', -1, 470 + 40, 350 - 5, 32, 32)
 GUICtrlSetCursor(-1, 0)
 GUICtrlSetTip(-1, sprache("GR_GUI_POPULAR"))
 
@@ -441,7 +476,7 @@ GUICtrlCreateLabel(StringReplace (sprache("GR_GUI_COPYRIGHT"),"[%]",$version), 8
 GUICtrlSetFont(-1, 10, 800, 0, "Arial", 5)
 GUICtrlSetColor(-1, 0x444444)
 GUICtrlCreateLabel(sprache("GR_GUI_ABOUTTEXT") & @CRLF & @CRLF & sprache("GR_MSG_DISCLAIMER"), 8, 35, $iW - $iLeftWidth - 39, 300)
-GUICtrlCreatePic ("Data\WTFPL.jpg",10,290,137,100)
+GUICtrlCreatePic ("..\Assets\WTFPL.jpg",10,290,137,100)
 
 
 GUISetState(@SW_HIDE, $Pannel[0])
@@ -454,12 +489,12 @@ GUISetState(@SW_SHOW, $Pannel[1])
 
 $aktivespannel = 1
 GUICtrlSetColor($Link[1], 0x0066CC)
-GUICtrlSetImage($icon[1], "Data\ico\1-.ico")
+GUICtrlSetImage($icon[1], $pButton & "1-.ico")
 
 
 ; Erstelle Auswahlmenü Suchergebnisse
 $Suche_GUI = GUICreate(sprache("GR_GUI_SEARCHGUI"), 116, 107, -1, -1, -1, $WS_EX_TOOLWINDOW, $HauptGUI)
-GUISetIcon("Data\icon.ico")
+GUISetIcon($fIco)
 $Suche_Alle = GUICtrlCreateButton(sprache("GR_GUI_SELECTALL"), 8, 8, 100, 25)
 $Suche_AlleAb = GUICtrlCreateButton(sprache("GR_GUI_UNSELECTALL"), 8, 41, 100, 25)
 $Suche_Umkehren = GUICtrlCreateButton(sprache("GR_GUI_INVERTSELECTION"), 8, 74, 100, 25)
@@ -467,7 +502,7 @@ $Suche_Umkehren = GUICtrlCreateButton(sprache("GR_GUI_INVERTSELECTION"), 8, 74, 
 
 ; Erstelle Auswahlmenü Downloadliste
 $DL_GUI = GUICreate(sprache("GR_GUI_DOWNLOADLIST"), 116, 107, -1, -1, -1, $WS_EX_TOOLWINDOW, $HauptGUI)
-GUISetIcon("Data\icon.ico")
+GUISetIcon($fIco)
 $DL_Alle = GUICtrlCreateButton(sprache("GR_GUI_SELECTALL"), 8, 8, 100, 25);T40
 $DL_AlleAb = GUICtrlCreateButton(sprache("GR_GUI_UNSELECTALL"), 8, 41, 100, 25);T41
 $DL_Umkehren = GUICtrlCreateButton(sprache("GR_GUI_INVERTSELECTION"), 8, 74, 100, 25);T42
@@ -478,9 +513,9 @@ $beliebtelieder = False
 GUIRegisterMsg($WM_NOTIFY, "_WM_NOTIFY")
 _ConsoleWrite(sprache("GR_MSG_CONNECTION"))
 $tooltipvar = TimerInit()
-If FileRead("Data/DLListe.txt") <> "" Then
-	For $i = 1 To _FileCountLines("Data/DLListe.txt")
-		$dlline = FileReadLine("Data/DLListe.txt", $i)
+If FileRead($fDownloadList) <> "" Then
+	For $i = 1 To _FileCountLines($fDownloadList)
+		$dlline = FileReadLine($fDownloadList, $i)
 		If $dlline <> "" Then
 			$dlelemente = StringSplit($dlline, "|")
 			For $a = 1 To 5
@@ -494,10 +529,10 @@ If FileRead("Data/DLListe.txt") <> "" Then
 		EndIf
 	Next
 	;_ArrayDisplay ($SongInfosFuerDLListe)
-	FileDelete("Data\DLListe.txt")
+	FileDelete($fDownloadList)
 	For $i = 0 To UBound($SongInfosFuerDLListe) - 1
 		GUICtrlCreateListViewItem($SongInfosFuerDLListe[$i][1] & "|" & $SongInfosFuerDLListe[$i][2] & "|" & $SongInfosFuerDLListe[$i][3], $GUI_DLListe)
-		FileWrite("Data\DLListe.txt", $SongInfosFuerDLListe[$i][0] & "|" & $SongInfosFuerDLListe[$i][1] & "|" & $SongInfosFuerDLListe[$i][2] & "|" & $SongInfosFuerDLListe[$i][3] & "|" & $SongInfosFuerDLListe[$i][4] & @CRLF)
+		FileWrite($fDownloadList, $SongInfosFuerDLListe[$i][0] & "|" & $SongInfosFuerDLListe[$i][1] & "|" & $SongInfosFuerDLListe[$i][2] & "|" & $SongInfosFuerDLListe[$i][3] & "|" & $SongInfosFuerDLListe[$i][4] & @CRLF)
 	Next
 
 EndIf
@@ -507,7 +542,7 @@ $nr = 1
 
 
 $tutgui = GUICreate("GrooveLoad", 426, 90 + 25 + 8, 4, 4, -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_TOPMOST))
-GUISetIcon("Data\icon.ico")
+GUISetIcon($fIco)
 $hMenu = _GUICtrlMenu_GetSystemMenu($tutgui)
 _GUICtrlMenu_EnableMenuItem($hMenu, $SC_CLOSE, $MF_GRAYED, False)
 GUISetBkColor(0xFFFFFF)
@@ -516,11 +551,11 @@ GUICtrlSetFont(-1, 8.5, Default, 0, 'Verdana')
 $weiter = GUICtrlCreateButton(sprache("GR_TUT_NEXT"), 344, 90, 75, 25)
 $zurueck = GUICtrlCreateButton(sprache("GR_TUT_BACK"), 264, 90, 75, 25)
 $dle = GUICtrlCreateButton(sprache("GR_GUI_DLSETTINGS"), 56, 90, 150, 25)
-GUICtrlCreateIcon("Data\ico\3.ico", -1, 0, 0, 48, 48)
+GUICtrlCreateIcon($pButton & "3.ico", -1, 0, 0, 48, 48)
 
 hinweise()
 GUICtrlSetState($dle, $GUI_HIDE)
-If IniRead("Data\config.ini", "Erster Start", "Einführung", 0) = 0 Then GUISetState(@SW_SHOW)
+If IniRead($nConfig, "Erster Start", "Einführung", 0) = 0 Then GUISetState(@SW_SHOW)
 ;GUISetState(@SW_SHOW)
 
 
@@ -530,32 +565,29 @@ GUISetState(@SW_SHOW, $HauptGUI)
 _FadeOut($Ladebildschirm)
 GUIDelete($Ladebildschirm)
 
-If FileExists(@ScriptDir & "\temp") Then
-	DirRemove(@ScriptDir & "\temp", 1)
+If FileExists('.\temp\') Then
+	DirRemove('.\temp\', 1)
 	; Entfernen zukünftiger Sicherheitsabfragen
 	$sUnknownZoneIdentifier = "Zone.Identifier"
 
-	$file = @ScriptDir & "\Data\AutoIt3.exe"
-	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
-	$file = @ScriptDir & "\Data\metamp3\metamp3.exe"
-	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
-	$file = @ScriptDir & "\Data\7za.exe"
-	If _ADS_Exists($file, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
+	If _ADS_Exists($eAutoIt, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
+	If _ADS_Exists($eMetaMP3, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
+	If _ADS_Exists($e7zip, $sUnknownZoneIdentifier) Then _ADS_Delete($file, $sUnknownZoneIdentifier)
 
 	GUISetState(@SW_DISABLE, $HauptGUI)
 	$Changelog_GUI = GUICreate("GrooveLoad", 458, 251, -1, -1, -1, -1, $HauptGUI)
-	GUISetIcon("Data\icon.ico")
+	GUISetIcon($fIco)
 	GUISetBkColor(0xFFFFFF)
 	GUICtrlCreateEdit("", 8, 28, 441, 153, BitOR($GUI_SS_DEFAULT_EDIT, $ES_READONLY))
 	If $_sprache = "Deutsch" Then
-		$wasistneu = _StringBetween(FileRead("Data\Neuerungen.txt"), "DE>>", "<<DE")
+		$wasistneu = _StringBetween(FileRead($fWhatsNew), "DE>>", "<<DE")
 	Else
-		$wasistneu = _StringBetween(FileRead("Data\Neuerungen.txt"), "EN>>", "<<EN")
+		$wasistneu = _StringBetween(FileRead($fWhatsNew), "EN>>", "<<EN")
 	EndIf
 	If IsArray($wasistneu) Then
 		$wasistneu = $wasistneu[0]
 	Else
-		$wasistneu = "Data\Neuerungen.txt is broken"
+		$wasistneu = $fWhatsNew & " is broken"
 	EndIf
 	GUICtrlSetData(-1, $wasistneu)
 	GUICtrlSetBkColor(-1, 0xFFFFFF)
@@ -586,9 +618,9 @@ If FileExists(@ScriptDir & "\temp") Then
 
 EndIf
 
-DirRemove (@ScriptDir & "\Data\tmp",1)
+DirRemove ('.\temp\',1)
 
-If FileRead("Data/DLListe.txt") <> "" Then ToolTip(sprache ("GR_GUI_STILLDL"), 551, 362, sprache("GR_GUI_STILLDLHEADLINE"), 1, 1)
+If FileRead($fDownloadList) <> "" Then ToolTip(sprache ("GR_GUI_STILLDL"), 551, 362, sprache("GR_GUI_STILLDLHEADLINE"), 1, 1)
 If $importantmsg <> "" Then MsgBox (0,"GrooveLoad",$importantmsg,0,$HauptGUI)
 While 1
 	$hGraphics = _GDIPlus_GraphicsCreateFromHWND($HauptGUI) ;create a graphics object from a window handle
@@ -800,13 +832,13 @@ While 1
 							$StreamIP = $StreamIP[0]
 							$StreamKey = $StreamKey[0]
 							
-							ShellExecute ("Data\AutoIt3.exe",'"'&@ScriptDir&'\Data\Reinhören.au3" "'&$StreamIP&'" "'&$StreamKey&'" "'&$SongInfo[$o][1]&'" "'&$spieldauer&'" "'&sprache("GR_GUI_PREVIEW")&'" "'&$HauptGUI&'"')
+							ShellExecute ($eAutoIt,'"'&$aListenServer&'" "'&$StreamIP&'" "'&$StreamKey&'" "'&$SongInfo[$o][1]&'" "'&$spieldauer&'" "'&sprache("GR_GUI_PREVIEW")&'" "'&$HauptGUI&'"')
 						EndIf
 					EndIf
 					If $p = 3 Then
 						$hauptguipos = WinGetPos($HauptGUI)
 						$teilengui = GUICreate($SongInfo[$o][1], 371, 82, $hauptguipos[0] + $hauptguipos[2] - 371 - 5, $hauptguipos[1] + $hauptguipos[3] - 82 - 23, -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_TOPMOST), $HauptGUI)
-						GUISetIcon("Data\icon.ico")
+						GUISetIcon($fIco)
 						GUISetBkColor(0xFFFFFF)
 						GUICtrlCreateLabel(sprache("GR_SHARE_LINK"), 8, 8, 105, 17)
 						$_groovesharklink = GUICtrlCreateLabel(sprache("GR_SHARE_REQUESTLINK"), 8, 24, 351, 17)
@@ -879,7 +911,7 @@ While 1
 	EndIf
 
 	If $nr = 8 Then ; Für Hinweise
-		IniWrite("Data\config.ini", "Erster Start", "Einführung", 1)
+		IniWrite($nConfig, "Erster Start", "Einführung", 1)
 		GUIDelete($tutgui)
 	EndIf
 	If $dloeffnen = True Then
@@ -895,33 +927,33 @@ While 1
 					GUICtrlSetColor($Link[2], 0x000000)
 					GUICtrlSetColor($Link[3], 0x000000)
 					GUICtrlSetColor($Link[$i], 0x0066CC)
-					GUICtrlSetImage($icon[0], "Data\ico\0.ico")
-					GUICtrlSetImage($icon[1], "Data\ico\1.ico")
-					GUICtrlSetImage($icon[2], "Data\ico\2.ico")
-					GUICtrlSetImage($icon[3], "Data\ico\3.ico")
-					GUICtrlSetImage($icon[$i], "Data\ico\" & $i & "-.ico")
+					GUICtrlSetImage($icon[0], $pButton  & "0.ico")
+					GUICtrlSetImage($icon[1], $pButton  & "1.ico")
+					GUICtrlSetImage($icon[2], $pButton  & "2.ico")
+					GUICtrlSetImage($icon[3], $pButton  & "3.ico")
+					GUICtrlSetImage($icon[$i], $pButton & $i & "-.ico")
 					GUISetState(@SW_SHOW, $Pannel[$i])
 					$aktivespannel = $i
 				Else
 					GUICtrlSetColor($Link[$i], 0x000000)
-					GUICtrlSetImage($icon[$i], "Data\ico\" & $i & ".ico")
+					GUICtrlSetImage($icon[$i], $pButton & $i & ".ico")
 					GUISetState(@SW_HIDE, $Pannel[$i])
 				EndIf
 			Next
 		Case $GUI_EVENT_CLOSE
 			If $nMsg[1] = $HauptGUI Then
-				If FileExists("Data\DLListe.txt") Then
+				If FileExists($fDownloadList) Then
 					$nachfrage = MsgBox(65536 + 48 + 3, "GrooveLoad", sprache("GR_MSG_NOTEMPTY"), $HauptGUI)
 					If $nachfrage = 7 Then ;T55
-						FileDelete("Data\DLListe.txt")
-						DirRemove (@ScriptDir & "\Data\tmp\",1)
+						FileDelete($fDownloadList)
+						DirRemove ($pTemp,1)
 						Exit
 					ElseIf $nachfrage = 6 Then
-						DirRemove (@ScriptDir & "\Data\tmp\",1)
+						DirRemove ($pTemp,1)
 						Exit
 					EndIf
 				Else
-					DirRemove (@ScriptDir & "\Data\tmp\",1)
+					DirRemove ($pTemp,1)
 					Exit
 				EndIf
 			EndIf
@@ -941,27 +973,27 @@ While 1
 			hinweise()
 		Case $GUI_zuruecksetzen
 			If MsgBox(4 + 32, "GrooveLoad", sprache("GR_RESET_SURE"), 0, $HauptGUI) = 6 Then
-				FileDelete("Data\config.ini")
-				FileDelete("Data\geheimwort.txt")
+				FileDelete($nConfig)
+				FileDelete($fSecret)
 				FileClose($loghandle)
-				FileDelete("Data\log.txt")
-				FileDelete("Data\DLListe.txt")
-				FileDelete("Data\cover.jpg")
-				FileDelete("Data\Reinhören.txt")
+				FileDelete($pLog)
+				FileDelete($fDownloadList)
+				FileDelete($defaultCover)
+				FileDelete($fListenFile)
 				DirRemove (@ScriptDir & "\Data\tmp",1)
-				FileDelete("Data\new.txt")
+				FileDelete($fNew)
 				FileDelete("Data\tmp.mp3")
 
 				For $i = 0 To 5
-					FileDelete("Data\cover\" & $i & ".jpg")
+					FileDelete($pCover & $i & ".jpg")
 				Next
-				If MsgBox(4, "GrooveLoad", sprache("GR_RESET_RESTART"), 0, $HauptGUI) = 6 Then ShellExecute("Data\AutoIt3.exe", '"' & @ScriptFullPath & '"')
+				If MsgBox(4, "GrooveLoad", sprache("GR_RESET_RESTART"), 0, $HauptGUI) = 6 Then ShellExecute($eAutoIt, '.\GrooveLoad.au3')
 				Exit
 			EndIf
 		Case $GUI_AufrufausDE
 			GUISetState(@SW_DISABLE, $HauptGUI)
 			$IPFuckGUI = GUICreate("GrooveLoad", 354, 177)
-			GUISetIcon("Data\icon.ico")
+			GUISetIcon($fIco)
 			GUISetBkColor(0xFFFFFF)
 			GUICtrlCreateLabel(sprache("GR_IPFUCK_DESCRIBTION"), 8, 8, 343, 78)
 			$Firefox = GUICtrlCreateLabel(sprache("GR_IPFUCK_LINK") & " Firefox", 8, 95, 200, 17)
@@ -992,8 +1024,8 @@ While 1
 			GUIDelete($IPFuckGUI)
 		Case $GUI_sprache
 			If xMsgBox(4, "GrooveLoad", sprache("GR_LNG_CURRENT") & " " & $_sprache, "OK", sprache("GR_LNG_CHANGE")) = 7 Then
-				IniWrite("Data\config.ini", "Sprache", "Sprache", -1)
-				ShellExecute("Data\AutoIt3.exe", '"' & @ScriptFullPath & '"')
+				IniWrite($fIco, "Sprache", "Sprache", -1)
+				ShellExecute($eAutoIt, '"' & @ScriptFullPath & '"')
 				Exit
 			EndIf
 		Case $GUI_feedback
@@ -1005,9 +1037,9 @@ While 1
 			WinActivate($HauptGUI)
 		Case $GUI_Downloadeinstellungen
 			GUISetState(@SW_DISABLE, $HauptGUI)
-			$ordnerpfad = IniRead("Data\config.ini", "Downloadeinstellungen", "Ordnerpfad", @ScriptDir & "\Downloads")
+			$ordnerpfad = IniRead($nConfig, "Downloadeinstellungen", "Ordnerpfad", $pDownloads)
 			$GUI_Downloadeinstellungenfenster = GUICreate(sprache("GR_GUI_DLSETTINGS"), 600, 670)
-			GUISetIcon("Data\icon.ico")
+			GUISetIcon($fIco)
 			GUICtrlCreateLabel(sprache("GR_DLGUI_PATH"), 8, 8, 500, 17)
 			$GUI_Downloadpfad = GUICtrlCreateLabel($ordnerpfad, 16, 24, 184 + 184, 17 + 10)
 			$GUI_DLPfadsuchen = GUICtrlCreateButton(sprache("GR_DLGUI_BROWSE"), 16, 40 + 17, 91, 25)
@@ -1019,7 +1051,7 @@ While 1
 			GUICtrlCreateLabel(sprache("GR_DLGUI_USABLE") & ": <" & sprache("GR_DLGUI_TITLE") & ">, <" & sprache("GR_DLGUI_TITLE") & ">, <" & sprache("GR_DLGUI_ALBUM") & ">", 16, 96 + 17, 249, 17)
 
 
-			$bennungsmuster = IniRead("Data\config.ini", "Downloadeinstellungen", "Benenung", "<Interpret> - <Titel>")
+			$bennungsmuster = IniRead($nConfig, "Downloadeinstellungen", "Benenung", "<Interpret> - <Titel>")
 
 			$bennungsmuster = StringReplace($bennungsmuster, "Interpret", sprache("GR_DLGUI_ARTIST"))
 			$bennungsmuster = StringReplace($bennungsmuster, "Album", sprache("GR_DLGUI_ALBUM"))
@@ -1033,16 +1065,16 @@ While 1
 			GUICtrlCreateLabel(sprache("GR_DLGUI_AFTER"), 8, 166, 200, 17)
 
 			$GUI_Winexplorer = GUICtrlCreateCheckbox(sprache("GR_DLGUI_EXPLORER"), 16, 184, 577, 17)
-			GUICtrlSetState(-1, IniRead("Data\config.ini", "Downloadeinstellungen", "Winexplorer", 4))
+			GUICtrlSetState(-1, IniRead($nConfig, "Downloadeinstellungen", "Winexplorer", 4))
 
 			$GUI_Playlist = GUICtrlCreateCheckbox(sprache("GR_DLGUI_PLAYLIST"), 16, 208, 577, 17)
-			GUICtrlSetState(-1, IniRead("Data\config.ini", "Downloadeinstellungen", "Playlist", 4))
+			GUICtrlSetState(-1, IniRead($nConfig, "Downloadeinstellungen", "Playlist", 4))
 			GUICtrlCreateLabel(sprache("GR_DLGUI_PLAYLISTTEXT"), 32, 226, 565, 39)
 
 			$GUI_MP3TAG = GUICtrlCreateCheckbox(sprache("GR_DLGUI_MP3TAG"), 16, 272, 577, 17)
-			GUICtrlSetState(-1, IniRead("Data\config.ini", "Downloadeinstellungen", "MP3TAG", 4))
+			GUICtrlSetState(-1, IniRead($nConfig, "Downloadeinstellungen", "MP3TAG", 4))
 			GUICtrlCreateLabel(sprache("GR_DLGUI_MP3TAGTEXT"), 32, 290, 565, 49)
-			$GUI_MP3TAG_Pfad = GUICtrlCreateLabel(sprache("GR_DLGUI_MP3TAGPATH") & ": " & IniRead("Data\config.ini", "Downloadeinstellungen", "PfadMP3TAG", sprache("GR_DLGUI_NOTSPECIFIED")), 32, 352, 490, 17)
+			$GUI_MP3TAG_Pfad = GUICtrlCreateLabel(sprache("GR_DLGUI_MP3TAGPATH") & ": " & IniRead($nConfig, "Downloadeinstellungen", "PfadMP3TAG", sprache("GR_DLGUI_NOTSPECIFIED")), 32, 352, 490, 17)
 			$GUI_MP3TAG_Pfad_aendern = GUICtrlCreateButton(sprache("GR_LNG_CHANGE"), 520, 344, 75, 25)
 			$GUI_MP3TAG_DL = GUICtrlCreateLabel(sprache("GR_DLGUI_MP3TAGDL"), 32, 376, 230, 17)
 			GUICtrlSetFont(-1, 8, 800, 4, "MS Sans Serif")
@@ -1052,20 +1084,20 @@ While 1
 			GUICtrlCreateLabel(sprache("GR_DLGUI_MORE"), 8, 408, 110, 17)
 
 			$GUI_Cover = GUICtrlCreateCheckbox(sprache("GR_DLGUI_COVER"), 16, 426, 577, 17)
-			GUICtrlSetState(-1, IniRead("Data\config.ini", "Downloadeinstellungen", "Cover", 4))
+			GUICtrlSetState(-1, IniRead($nConfig, "Downloadeinstellungen", "Cover", 4))
 			GUICtrlCreateLabel(sprache("GR_DLGUI_COVERTEXT"), 32, 448, 563, 48)
 			Dim $Radio[4]
 			GUIStartGroup()
 			$Radio[1] = GUICtrlCreateRadio(sprache("GR_DLGUI_COVERMP3"), 32, 500, 561, 17)
 			$Radio[2] = GUICtrlCreateRadio(sprache("GR_DLGUI_COVERJPG"), 32, 516, 561, 17)
 			$Radio[3] = GUICtrlCreateRadio(sprache("GR_DLGUI_COVERMP3JPG"), 32, 532, 561, 17)
-			GUICtrlSetState($Radio[IniRead("Data\config.ini", "Downloadeinstellungen", "Umgang mit Cover", 1)], 1)
+			GUICtrlSetState($Radio[IniRead($nConfig, "Downloadeinstellungen", "Umgang mit Cover", 1)], 1)
 			GUICtrlCreateLabel(sprache("GR_DLGUI_NAMEEXIST"), 8, 560)
 			GUIStartGroup()
 			GUICtrlCreateRadio(sprache("GR_DLGUI_DIFFERENTNAME"), 32, 575, 561, 17)
 			GUICtrlSetState(-1, 1)
 			$ueberschreiben = GUICtrlCreateRadio(sprache("GR_DLGUI_OVERWRITE"), 32, 592, 561, 17)
-			If IniRead("Data\config.ini", "Downloadeinstellungen", "Überschreiben", 4) = 1 Then
+			If IniRead($nConfig, "Downloadeinstellungen", "Überschreiben", 4) = 1 Then
 				GUICtrlSetState($ueberschreiben, 1)
 			EndIf
 			GUISetState(@SW_SHOW)
@@ -1111,25 +1143,25 @@ While 1
 						ElseIf StringReplace(GUICtrlRead($GUI_MP3TAG_Pfad), sprache("GR_DLGUI_MP3TAGPATH") & ": ", "") = sprache("GR_DLGUI_NOTSPECIFIED") And GUICtrlRead($GUI_MP3TAG) = 1 Then
 							MsgBox(16, "Grooveload", sprache("GR_DLGUI_MP3TAGPATHMISSING"))
 						Else
-							IniWrite("Data\config.ini", "Downloadeinstellungen", "MP3TAG", GUICtrlRead($GUI_MP3TAG))
-							IniWrite("Data\config.ini", "Downloadeinstellungen", "PfadMP3TAG", StringReplace(GUICtrlRead($GUI_MP3TAG_Pfad), sprache("GR_DLGUI_MP3TAGPATH") & ": ", ""))
-							IniWrite("Data\config.ini", "Downloadeinstellungen", "Ordnerpfad", $ordnerpfad)
+							IniWrite($nConfig, "Downloadeinstellungen", "MP3TAG", GUICtrlRead($GUI_MP3TAG))
+							IniWrite($nConfig, "Downloadeinstellungen", "PfadMP3TAG", StringReplace(GUICtrlRead($GUI_MP3TAG_Pfad), sprache("GR_DLGUI_MP3TAGPATH") & ": ", ""))
+							IniWrite($nConfig, "Downloadeinstellungen", "Ordnerpfad", $ordnerpfad)
 
 							$bennungsmuster = GUICtrlRead($GUI_DLName)
 							$bennungsmuster = StringReplace($bennungsmuster, sprache("GR_DLGUI_ARTIST"), "Interpret")
 							$bennungsmuster = StringReplace($bennungsmuster, sprache("GR_DLGUI_ALBUM"), "Album")
 							$bennungsmuster = StringReplace($bennungsmuster, sprache("GR_DLGUI_TITLE"), "Titel")
-							IniWrite("Data\config.ini", "Downloadeinstellungen", "Benenung", $bennungsmuster)
-							IniWrite("Data\config.ini", "Downloadeinstellungen", "Winexplorer", GUICtrlRead($GUI_Winexplorer))
-							IniWrite("Data\config.ini", "Downloadeinstellungen", "Playlist", GUICtrlRead($GUI_Playlist))
-							IniWrite("Data\config.ini", "Downloadeinstellungen", "Cover", GUICtrlRead($GUI_Cover))
+							IniWrite($nConfig, "Downloadeinstellungen", "Benenung", $bennungsmuster)
+							IniWrite($nConfig, "Downloadeinstellungen", "Winexplorer", GUICtrlRead($GUI_Winexplorer))
+							IniWrite($nConfig, "Downloadeinstellungen", "Playlist", GUICtrlRead($GUI_Playlist))
+							IniWrite($nConfig, "Downloadeinstellungen", "Cover", GUICtrlRead($GUI_Cover))
 							For $i = 1 To 3
 								If GUICtrlRead($Radio[$i]) = 1 Then
-									IniWrite("Data\config.ini", "Downloadeinstellungen", "Umgang mit Cover", $i)
+									IniWrite($nConfig, "Downloadeinstellungen", "Umgang mit Cover", $i)
 									ExitLoop
 								EndIf
 							Next
-							IniWrite("Data\config.ini", "Downloadeinstellungen", "Überschreiben", GUICtrlRead($ueberschreiben))
+							IniWrite($nConfig, "Downloadeinstellungen", "Überschreiben", GUICtrlRead($ueberschreiben))
 							GUISetState(@SW_ENABLE, $HauptGUI)
 							WinActivate($HauptGUI)
 							GUIDelete($GUI_Downloadeinstellungenfenster)
@@ -1205,7 +1237,7 @@ While 1
 			WinMove(sprache("GR_GUI_DOWNLOADLIST"), "", $hauptguipos[0] + 755, $hauptguipos[1] + 320)
 			GUISetState(@SW_SHOW, $DL_GUI)
 		Case $GUI_DLListeleeren
-			FileDelete("Data\DLListe.txt")
+			FileDelete($fDownloadList)
 			;_ArrayDisplay ($SongInfosFuerDLListe)
 			For $i = _GUICtrlListView_GetItemCount($GUI_DLListe) - 1 To 0 Step -1
 				If _GUICtrlListView_GetItemChecked($GUI_DLListe, $i) Then
@@ -1219,7 +1251,7 @@ While 1
 				EndIf
 			Next
 			For $i = 0 To UBound($SongInfosFuerDLListe) - 1
-				If $SongInfosFuerDLListe[$i][0] <> "" Then FileWrite("Data\DLListe.txt", $SongInfosFuerDLListe[$i][0] & "|" & $SongInfosFuerDLListe[$i][1] & "|" & $SongInfosFuerDLListe[$i][2] & "|" & $SongInfosFuerDLListe[$i][3] & "|" & $SongInfosFuerDLListe[$i][4] & @CRLF)
+				If $SongInfosFuerDLListe[$i][0] <> "" Then FileWrite($fDownloadList, $SongInfosFuerDLListe[$i][0] & "|" & $SongInfosFuerDLListe[$i][1] & "|" & $SongInfosFuerDLListe[$i][2] & "|" & $SongInfosFuerDLListe[$i][3] & "|" & $SongInfosFuerDLListe[$i][4] & @CRLF)
 			Next
 			;_ArrayDisplay ($SongInfosFuerDLListe)
 		Case $DL_Alle
@@ -1401,7 +1433,7 @@ While 1
 					$SongInfosFuerDLListe[$a][2] = $SongInfo[$i][3] ; Interpret
 					$SongInfosFuerDLListe[$a][3] = $SongInfo[$i][2] ; Album
 					$SongInfosFuerDLListe[$a][4] = $SongInfo[$i][6] ; Cover-Info
-					FileWrite("Data\DLListe.txt", $SongInfosFuerDLListe[$a][0] & "|" & $SongInfosFuerDLListe[$a][1] & "|" & $SongInfosFuerDLListe[$a][2] & "|" & $SongInfosFuerDLListe[$a][3] & "|" & $SongInfosFuerDLListe[$a][4] & @CRLF)
+					FileWrite($fDownloadList, $SongInfosFuerDLListe[$a][0] & "|" & $SongInfosFuerDLListe[$a][1] & "|" & $SongInfosFuerDLListe[$a][2] & "|" & $SongInfosFuerDLListe[$a][3] & "|" & $SongInfosFuerDLListe[$a][4] & @CRLF)
 					$a = $a + 1
 					$neudazu = $neudazu + 1
 				EndIf
@@ -1427,12 +1459,12 @@ While 1
 				WinActivate($HauptGUI)
 			Else
 				$SongInfosFuerDLListeBackup = $SongInfosFuerDLListe
-				$bytesread = IniRead("Data\config.ini", "Downloadeinstellungen", "NumberOfBytesToRead", 150000)
+				$bytesread = IniRead($nConfig, "Downloadeinstellungen", "NumberOfBytesToRead", 150000)
 				_Log("NumberOfBytesToRead: " & $bytesread)
 				GUI_Deaktivieren()
 				_GUI_ProgressAn()
 				_ConsoleWrite(sprache("GR_MSG_STREAMDATA"))
-				$hfileplaylist = IniRead("Data\config.ini", "Downloadeinstellungen", "Ordnerpfad", @ScriptDir & "\Downloads") & "\" & @MDAY & "." & @MON & "." & @YEAR & " " & @HOUR & "." & @MIN & ".m3u"
+				$hfileplaylist = IniRead($nConfig, "Downloadeinstellungen", "Ordnerpfad", $pDownloads) & "\" & @MDAY & "." & @MON & "." & @YEAR & " " & @HOUR & "." & @MIN & ".m3u"
 				For $i = 0 To _GUICtrlListView_GetItemCount($GUI_DLListe) - 1
 					If TimerDiff($time) > 540000 Then ; 540000 ms = 9 Minuten
 
@@ -1530,7 +1562,7 @@ While 1
 						_WinHttpSendRequest($h_openRequest, $FakeIP & @CRLF & "Content-Type: application/x-www-form-urlencoded", 'streamKey=' & $SongInfosFuerDLListe[$i][6])
 
 						_WinHttpReceiveResponse($h_openRequest)
-						$benennungsvariable = IniRead("Data\config.ini", "Downloadeinstellungen", "Benenung", "<Interpret> - <Titel>")
+						$benennungsvariable = IniRead($nConfig, "Downloadeinstellungen", "Benenung", "<Interpret> - <Titel>")
 						$SongInfosFuerDLListe[$i][1] = StringReplace($SongInfosFuerDLListe[$i][1], ":", "")
 						$SongInfosFuerDLListe[$i][2] = StringReplace($SongInfosFuerDLListe[$i][2], ":", "")
 						$SongInfosFuerDLListe[$i][3] = StringReplace($SongInfosFuerDLListe[$i][3], ":", "")
@@ -1555,9 +1587,9 @@ While 1
 						$pfadteile[$pfadteile[0]] = StringReplace($pfadteile[$pfadteile[0]], "/", "")
 						$pfadteile[$pfadteile[0]] = StringReplace($pfadteile[$pfadteile[0]], "*", "")
 
-						DirCreate(IniRead("Data\config.ini", "Downloadeinstellungen", "Ordnerpfad", @ScriptDir & "\Downloads") & "\" & $PfadohneDatei)
-						$dateinamen[$i] = IniRead("Data\config.ini", "Downloadeinstellungen", "Ordnerpfad", @ScriptDir & "\Downloads") & "\" & $PfadohneDatei & $pfadteile[$pfadteile[0]] & ".mp3"
-						If IniRead("Data\config.ini", "Downloadeinstellungen", "Überschreiben", 4) = 4 And FileExists ($dateinamen[$i]) Then
+						DirCreate(IniRead($nConfig, "Downloadeinstellungen", "Ordnerpfad", $pDownloads) & "\" & $PfadohneDatei)
+						$dateinamen[$i] = IniRead($nConfig, "Downloadeinstellungen", "Ordnerpfad", $pDownloads) & "\" & $PfadohneDatei & $pfadteile[$pfadteile[0]] & ".mp3"
+						If IniRead($nConfig, "Downloadeinstellungen", "Überschreiben", 4) = 4 And FileExists ($dateinamen[$i]) Then
 							$dateinamen[$i] = StringReplace ($dateinamen[$i],".mp3"," (2).mp3")
 							If FileExists ($dateinamen[$i]) Then
 								$l = 3
@@ -1612,10 +1644,10 @@ While 1
 							GUICtrlSetData($GUI_Progress, 100)
 							FileWrite($open, $data)
 							FileClose($open)
-							If IniRead("Data\config.ini", "Downloadeinstellungen", "Playlist", 4) = 1 Then FileWrite($hfileplaylist, $dateinamen[$i] & @CRLF)
+							If IniRead($nConfig, "Downloadeinstellungen", "Playlist", 4) = 1 Then FileWrite($hfileplaylist, $dateinamen[$i] & @CRLF)
 							_ArrayDelete($SongInfosFuerDLListeBackup, 0)
 							#Region Cover Download
-							If IniRead("Data\config.ini", "Downloadeinstellungen", "Cover", 4) = 1 Then
+							If IniRead($nConfig, "Downloadeinstellungen", "Cover", 4) = 1 Then
 								If $SongInfosFuerDLListe[$i][4] = '""' Or $SongInfosFuerDLListe[$i][4] = "null" Then
 
 									$term = StringReplace($SongInfosFuerDLListe[$i][1], " ", "+") & " " & StringReplace($SongInfosFuerDLListe[$i][2], " ", "+")
@@ -1653,11 +1685,11 @@ While 1
 													$coverhandle = FileOpen($coverpfad, 16 + 2)
 													FileWrite($coverhandle, $data)
 													FileClose($coverhandle)
-													$auflistung[$i][5] = "Data\tmp\" & $i & ".jpg"
+													$auflistung[$i][5] = $pTemp & $i & ".jpg"
 													FileCopy($coverpfad, $auflistung[$i][5], 8)
 													;ConsoleWrite ('Data\metamp3\metamp3.exe --pict "'&$coverpfad&'" "'&$dateinamen[$i]&'"' & @CRLF)
-													If IniRead("Data\config.ini", "Downloadeinstellungen", "Umgang mit Cover", 1) <> 2 Then ShellExecuteWait('Data\metamp3\metamp3.exe', '--pict "' & $coverpfad & '" "' & $dateinamen[$i] & '"', Default, Default, @SW_HIDE)
-													If IniRead("Data\config.ini", "Downloadeinstellungen", "Umgang mit Cover", 1) = 1 Then FileDelete($coverpfad)
+													If IniRead($nConfig, "Downloadeinstellungen", "Umgang mit Cover", 1) <> 2 Then ShellExecuteWait($eMetaMP3, '--pict "' & $coverpfad & '" "' & $dateinamen[$i] & '"', Default, Default, @SW_HIDE)
+													If IniRead($nConfig, "Downloadeinstellungen", "Umgang mit Cover", 1) = 1 Then FileDelete($coverpfad)
 												EndIf
 											EndIf
 										Else
@@ -1695,11 +1727,11 @@ While 1
 													$coverhandle = FileOpen($coverpfad, 16 + 2)
 													FileWrite($coverhandle, $data)
 													FileClose($coverhandle)
-													$auflistung[$i][5] = "Data\tmp\" & $i & ".jpg"
+													$auflistung[$i][5] = $pTemp & $i & ".jpg"
 													FileCopy($coverpfad, $auflistung[$i][5], 8)
 													;ConsoleWrite ('Data\metamp3\metamp3.exe --pict "'&$coverpfad&'" "'&$dateinamen[$i]&'"' & @CRLF)
-													If IniRead("Data\config.ini", "Downloadeinstellungen", "Umgang mit Cover", 1) <> 2 Then ShellExecuteWait('Data\metamp3\metamp3.exe', '--pict "' & $coverpfad & '" "' & $dateinamen[$i] & '"', Default, Default, @SW_HIDE)
-													If IniRead("Data\config.ini", "Downloadeinstellungen", "Umgang mit Cover", 1) = 1 Then FileDelete($coverpfad)
+													If IniRead($nConfig, "Downloadeinstellungen", "Umgang mit Cover", 1) <> 2 Then ShellExecuteWait($eMetaMP3, '--pict "' & $coverpfad & '" "' & $dateinamen[$i] & '"', Default, Default, @SW_HIDE)
+													If IniRead($nConfig, "Downloadeinstellungen", "Umgang mit Cover", 1) = 1 Then FileDelete($coverpfad)
 												EndIf
 												;	_WinHttpCloseHandle($hOpen)
 											Else
@@ -1726,11 +1758,11 @@ While 1
 										$coverhandle = FileOpen($coverpfad, 16 + 2)
 										FileWrite($coverhandle, $data)
 										FileClose($coverhandle)
-										$auflistung[$i][5] = "Data\tmp\" & $i & ".jpg"
+										$auflistung[$i][5] = $pTemp & $i & ".jpg"
 										FileCopy($coverpfad, $auflistung[$i][5], 8)
 										;ConsoleWrite ('Data\metamp3\metamp3.exe --pict "'&$coverpfad&'" "'&$dateinamen[$i]&'"' & @CRLF)
-										If IniRead("Data\config.ini", "Downloadeinstellungen", "Umgang mit Cover", 1) <> 2 Then ShellExecuteWait('Data\metamp3\metamp3.exe', '--pict "' & $coverpfad & '" "' & $dateinamen[$i] & '"', Default, Default, @SW_HIDE)
-										If IniRead("Data\config.ini", "Downloadeinstellungen", "Umgang mit Cover", 1) = 1 Then FileDelete($coverpfad)
+										If IniRead($nConfig, "Downloadeinstellungen", "Umgang mit Cover", 1) <> 2 Then ShellExecuteWait($eMetaMP3, '--pict "' & $coverpfad & '" "' & $dateinamen[$i] & '"', Default, Default, @SW_HIDE)
+										If IniRead($nConfig, "Downloadeinstellungen", "Umgang mit Cover", 1) = 1 Then FileDelete($coverpfad)
 									EndIf
 									;	_WinHttpCloseHandle($hOpen)
 								EndIf
@@ -1768,11 +1800,11 @@ While 1
 				_GUI_ProgressAus()
 				_GUI_ProgressAn()
 
-				FileDelete("Data\DLListe.txt")
+				FileDelete($fDownloadList)
 				Dim $SongInfosFuerDLListe[UBound($SongInfosFuerDLListeBackup)][7]
 
 				For $i = 0 To UBound($SongInfosFuerDLListeBackup) - 1
-					FileWrite("Data\DLListe.txt", $SongInfosFuerDLListeBackup[$i][0] & "|" & $SongInfosFuerDLListeBackup[$i][1] & "|" & $SongInfosFuerDLListeBackup[$i][2] & "|" & $SongInfosFuerDLListeBackup[$i][3] & "|" & $SongInfosFuerDLListeBackup[$i][4] & @CRLF)
+					FileWrite($fDownloadList, $SongInfosFuerDLListeBackup[$i][0] & "|" & $SongInfosFuerDLListeBackup[$i][1] & "|" & $SongInfosFuerDLListeBackup[$i][2] & "|" & $SongInfosFuerDLListeBackup[$i][3] & "|" & $SongInfosFuerDLListeBackup[$i][4] & @CRLF)
 					$SongInfosFuerDLListe[$i][0] = $SongInfosFuerDLListeBackup[$i][0]
 					$SongInfosFuerDLListe[$i][1] = $SongInfosFuerDLListeBackup[$i][1]
 					$SongInfosFuerDLListe[$i][2] = $SongInfosFuerDLListeBackup[$i][2]
@@ -1785,8 +1817,8 @@ While 1
 
 				Dim $SongInfosFuerDLListeBackup[1][7]
 
-				If IniRead("Data\config.ini", "Downloadeinstellungen", "Winexplorer", 4) = 1 Then ShellExecute(IniRead("Data\config.ini", "Downloadeinstellungen", "Ordnerpfad", @ScriptDir & "\Downloads"))
-				If IniRead("Data\config.ini", "Downloadeinstellungen", "MP3TAG", 4) = 1 Then ShellExecute(IniRead("Data\config.ini", "Downloadeinstellungen", "PfadMP3TAG", ""), '/fp:"' & IniRead("Data\config.ini", "Downloadeinstellungen", "Ordnerpfad", @ScriptDir & "\Downloads") & '"')
+				If IniRead($nConfig, "Downloadeinstellungen", "Winexplorer", 4) = 1 Then ShellExecute(IniRead($nConfig, "Downloadeinstellungen", "Ordnerpfad", $pDownloads))
+				If IniRead($nConfig, "Downloadeinstellungen", "MP3TAG", 4) = 1 Then ShellExecute(IniRead($nConfig, "Downloadeinstellungen", "PfadMP3TAG", ""), '/fp:"' & IniRead($nConfig, "Downloadeinstellungen", "Ordnerpfad", $pDownloads) & '"')
 				;Mp3tag.exe /fp:"<Verzeichnispfad>"
 
 				_GUI_ProgressAus()
@@ -1802,7 +1834,7 @@ While 1
 				GUIRegisterMsg($WM_GETMINMAXINFO, "WM_GETMINMAXINFO")
 				$hWnd = GUICreate("Abschlussbericht", 700, 570, -1, -1, $WS_SIZEBOX + $WS_MAXIMIZEBOX,-1,$HauptGUI)
 				GUISetBkColor(0xFFFFFF)
-				GUISetIcon("Data\icon.ico")
+				GUISetIcon($fIco)
 				$listview = GUICtrlCreateListView("", 0, 33, 696, 450, $LVS_SINGLESEL, $LVS_EX_FULLROWSELECT)
 				GUICtrlSetResizing(-1, $GUI_DOCKTOP + $GUI_DOCKBOTTOM)
 
@@ -1833,7 +1865,7 @@ While 1
 					If $auflistung[$i][5] <> "" Then
 						$bildpfad = $auflistung[$i][5]
 					Else
-						$bildpfad = "Data\cover\cover.jpg"
+						$bildpfad = $defaultCover
 					EndIf
 					$hBitmap = ScaleImage($bildpfad, 70, 70)
 					_GUIImageList_Add($hImage, _GDIPlus_BitmapCreateHBITMAPFromBitmap($hBitmap))
@@ -1917,13 +1949,13 @@ While 1
 							ExitLoop
 						Case $Abschluss_MP3tag
 							; Mp3tag.exe /fn:"<Dateipfad>"
-							If IniRead("Data\config.ini", "Downloadeinstellungen", "PfadMP3TAG", "Nicht angegeben") = "Nicht angegeben" Then
+							If IniRead($nConfig, "Downloadeinstellungen", "PfadMP3TAG", "Nicht angegeben") = "Nicht angegeben" Then
 								MsgBox (16,"GrooveLoad","Es wurde kein Pfad zu MP3tag angegeben. Du kannst dies in den Downloadeinstellungen nachholen.")
 							Else
-								ShellExecute(IniRead("Data\config.ini", "Downloadeinstellungen", "PfadMP3TAG", "Nicht angegeben"), '/fn:"' & $auflistung[_GUICtrlListView_GetSelectedIndices($listview)][4] & '"')
+								ShellExecute(IniRead($nConfig, "Downloadeinstellungen", "PfadMP3TAG", "Nicht angegeben"), '/fn:"' & $auflistung[_GUICtrlListView_GetSelectedIndices($listview)][4] & '"')
 							EndIf
 						Case $Abschluss_Cover_aendern
-							ShellExecute ("Data\AutoIt3.exe",'"' & @ScriptDir & '\Data\Coversuche.au3" "' & $auflistung[_GUICtrlListView_GetSelectedIndices($listview)][3] & ' ' & $auflistung[_GUICtrlListView_GetSelectedIndices($listview)][1] & '"')
+							ShellExecute ($eAutoIt,'".\Coversuche.au3" "' & $auflistung[_GUICtrlListView_GetSelectedIndices($listview)][3] & ' ' & $auflistung[_GUICtrlListView_GetSelectedIndices($listview)][1] & '"')
 					EndSwitch
 
 				Until $Abschlussmsg = $GUI_EVENT_CLOSE
@@ -1940,15 +1972,15 @@ While 1
 
 			EndIf
 		Case $grooveicon
-			If $krokodilzahl = _FileCountLines("Data\ico\Großes grünes Krokodil") Then
+			If $krokodilzahl = _FileCountLines($fKroko) Then
 				$krokodilzahl = 0
-				GUICtrlSetImage($grooveicon, "Data\icon.ico")
+				GUICtrlSetImage($grooveicon, $fIco)
 				GUICtrlSetData($groovelabel, "GrooveLoad")
 				$GruenesKrokodil = False
 			Else
 				$krokodilzahl = $krokodilzahl + 1
-				GUICtrlSetImage($grooveicon, "Data\ico\Großes grünes Krokodil.ico")
-				GUICtrlSetData($groovelabel, FileReadLine("Data\ico\Großes grünes Krokodil", $krokodilzahl))
+				GUICtrlSetImage($grooveicon, $fIcoKroko)
+				GUICtrlSetData($groovelabel, FileReadLine($fIcoKroko, $krokodilzahl))
 			EndIf
 		Case $GUI_FooterText
 			If $nilpferd = 0 Then
@@ -1964,7 +1996,7 @@ While 1
 			GUISetState(@SW_DISABLE, $HauptGUI)
 
 			$Stapelsuche_GUI = GUICreate("GrooveLoad", 410, 440, -1, -1, -1, -1, $HauptGUI)
-			GUISetIcon("Data\icon.ico")
+			GUISetIcon($fIco)
 			$Stapel_Edit = GUICtrlCreateEdit("", 8, 70, 393, 329)
 			GUICtrlCreateLabel(sprache("GR_AUTO_TEXT"), 8, 8, 395, 50)
 			$Stapel_Speichern = GUICtrlCreateButton(sprache("GR_AUTO_START"), 124, 408, 163, 25)
@@ -1981,7 +2013,7 @@ While 1
 						ExitLoop
 					Case $Stapel_Speichern
 						$stapelladefenster = GUICreate("GrooveLoad", 232, 85, -1, -1, -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_TOPMOST))
-						GUISetIcon("Data\icon.ico")
+						GUISetIcon($fIco)
 						GUISetBkColor(0xFFFFFF)
 						$stapelprogress = GUICtrlCreateProgress(8, 28, 214, 17)
 						GUICtrlCreateLabel(sprache("GR_AUTO_SEARCH"), 8, 8, 162, 17)
@@ -2065,7 +2097,7 @@ While 1
 									$SongInfosFuerDLListe[$a][3] = $AlbumName[0] ; Album
 									$SongInfosFuerDLListe[$a][4] = $cover[0] ; Cover-Info
 									GUICtrlCreateListViewItem($SongInfosFuerDLListe[$a][1] & "|" & $SongInfosFuerDLListe[$a][2] & "|" & $SongInfosFuerDLListe[$a][3], $GUI_DLListe)
-									FileWrite("Data\DLListe.txt", $SongInfosFuerDLListe[$a][0] & "|" & $SongInfosFuerDLListe[$a][1] & "|" & $SongInfosFuerDLListe[$a][2] & "|" & $SongInfosFuerDLListe[$a][3] & "|" & $SongInfosFuerDLListe[$a][4] & @CRLF)
+									FileWrite($fDownloadList, $SongInfosFuerDLListe[$a][0] & "|" & $SongInfosFuerDLListe[$a][1] & "|" & $SongInfosFuerDLListe[$a][2] & "|" & $SongInfosFuerDLListe[$a][3] & "|" & $SongInfosFuerDLListe[$a][4] & @CRLF)
 								EndIf
 							EndIf
 							GUICtrlSetData($stapelprogress, $z / (_GUICtrlEdit_GetLineCount($Stapel_Edit) - 1) * 100)
@@ -2076,8 +2108,8 @@ While 1
 						$aktivespannel = 0
 						GUICtrlSetColor($Link[0], 0x0066CC)
 						GUICtrlSetColor($Link[1], 0x000000)
-						GUICtrlSetImage($icon[0], "Data\ico\0-.ico")
-						GUICtrlSetImage($icon[1], "Data\ico\1.ico")
+						GUICtrlSetImage($icon[0], $pButton & "0-.ico")
+						GUICtrlSetImage($icon[1], $pButton & "1.ico")
 						GUISetState(@SW_ENABLE, $HauptGUI)
 						WinActivate($HauptGUI)
 						MsgBox(64, "GrooveLoad", sprache("GR_AUTO_FINISH"), 0, $HauptGUI)
@@ -2086,10 +2118,10 @@ While 1
 			WEnd
 
 		Case $GUI_verknuepfung
-			FileCreateShortcut(@ScriptDir & "\Data\AutoIt3.exe", @DesktopDir & "\GrooveLoad.lnk", "", '"' & @ScriptDir & "\GrooveLoad.au3" & '"', "", @ScriptDir & "\Data\icon.ico")
+			FileCreateShortcut($eAutoIt, @DesktopDir & "\GrooveLoad.lnk", "", '"' & @ScriptFullPath & '"', "", _PathFull($fIco))
 			MsgBox(64, "GrooveLoad", sprache("GR_SHORTCUT_TEXT"), 0, $HauptGUI)
 		Case $manuell_Cover
-			ShellExecute("Data\AutoIt3.exe", '"' & @ScriptDir & '\Data\Coversuche.au3"')
+			ShellExecute($eAutoIt, '.\Coversearch.au3')
 	EndSwitch
 
 WEnd
@@ -2113,7 +2145,7 @@ Func Interneteinstellungen($type = 0)
 		MsgBox(16, "GrooveLoad", "Es konnte keine Verbindung zu Grooveshark hergestellt werden. Bitte überprüfe im Folgenden deine Verbindungseinstellungen.");T100
 	EndIf
 	$GUI_FensterVerbindungseinstellungen = GUICreate(sprache("GR_GUI_CONNECTION"), 338, 270)
-	GUISetIcon("Data\icon.ico")
+	GUISetIcon($fIco)
 	$GUI_ProxyCheckbox = GUICtrlCreateCheckbox(sprache("GR_CONN_PROXY"), 8, 8, 97, 17)
 	$GUI_ProxyIP = GUICtrlCreateInput("IP:Port", 24, 32, 305, 21)
 	$GUI_VerbindungTest = GUICtrlCreateButton(sprache("GR_CONN_CHECK"), 216, 237, 110, 25)
@@ -2126,12 +2158,12 @@ Func Interneteinstellungen($type = 0)
 	GUICtrlCreateLabel(sprache("GR_CONN_IPTEXT"), 24, 93, 294, 25)
 	$GUI_ZufallsIP = GUICtrlCreateInput("81.158.166.", 24, 123, 121, 21)
 	$GUI_Reset = GUICtrlCreateButton(sprache("GR_DLGUI_RESET"), 160, 123, 75, 21)
-	GUICtrlSetState($GUI_ProxyCheckbox, IniRead("Data\config.ini", "Proxy", "Proxy_nutzen", 4))
-	GUICtrlSetData($GUI_ProxyIP, IniRead("Data\config.ini", "Proxy", "Proxy_IP", "IP:Port"))
-	GUICtrlSetState($GUI_XFor, IniRead("Data\config.ini", "X-FORWARDED-FOR", "FORWARDED_nutzen", 1))
-	GUICtrlSetData($GUI_ZufallsIP, IniRead("Data\config.ini", "X-FORWARDED-FOR", "FORWARDED_IP", "81.158.166."))
+	GUICtrlSetState($GUI_ProxyCheckbox, IniRead($nConfig, "Proxy", "Proxy_nutzen", 4))
+	GUICtrlSetData($GUI_ProxyIP, IniRead($nConfig, "Proxy", "Proxy_IP", "IP:Port"))
+	GUICtrlSetState($GUI_XFor, IniRead($nConfig, "X-FORWARDED-FOR", "FORWARDED_nutzen", 1))
+	GUICtrlSetData($GUI_ZufallsIP, IniRead($nConfig, "X-FORWARDED-FOR", "FORWARDED_IP", "81.158.166."))
 	GUICtrlCreateLabel(sprache("GR_CONN_BYTES"), 8, 152, 330, 39)
-	$GUI_Bytes = GUICtrlCreateInput(IniRead("Data\config.ini", "Downloadeinstellungen", "NumberOfBytesToRead", 150000), 24, 199, 121, 21)
+	$GUI_Bytes = GUICtrlCreateInput(IniRead($nConfig, "Downloadeinstellungen", "NumberOfBytesToRead", 150000), 24, 199, 121, 21)
 	$GUI_ResetBytes = GUICtrlCreateButton(sprache("GR_DLGUI_RESET"), 160, 199, 75, 21)
 	GUISetState(@SW_SHOW)
 
@@ -2165,7 +2197,7 @@ Func Interneteinstellungen($type = 0)
 					Next
 					If $SessionID = -1 Or $CommunicationToken = -1 Then
 						MsgBox(16, "GrooveLoad", sprache("GR_MSG_ERRORSESSIONID"))
-						ShellExecute("Data\AutoIt3.exe", '"' & @ScriptFullPath & '"')
+						ShellExecute($eAutoIt, '"' & @ScriptFullPath & '"')
 						Exit
 					EndIf
 					$time = TimerInit()
@@ -2219,15 +2251,15 @@ Func Interneteinstellungen($type = 0)
 				; -----Ende Testaufruf
 
 			Case $GUI_Speichern
-				IniWrite("Data\config.ini", "Proxy", "Proxy_nutzen", GUICtrlRead($GUI_ProxyCheckbox)) ;Y=1, N=4
-				IniWrite("Data\config.ini", "Proxy", "Proxy_IP", GUICtrlRead($GUI_ProxyIP))
-				IniWrite("Data\config.ini", "X-FORWARDED-FOR", "FORWARDED_nutzen", GUICtrlRead($GUI_XFor)) ;Y=1, N=4
-				IniWrite("Data\config.ini", "Downloadeinstellungen", "NumberOfBytesToRead", GUICtrlRead($GUI_Bytes))
+				IniWrite($nConfig, "Proxy", "Proxy_nutzen", GUICtrlRead($GUI_ProxyCheckbox)) ;Y=1, N=4
+				IniWrite($nConfig, "Proxy", "Proxy_IP", GUICtrlRead($GUI_ProxyIP))
+				IniWrite($nConfig, "X-FORWARDED-FOR", "FORWARDED_nutzen", GUICtrlRead($GUI_XFor)) ;Y=1, N=4
+				IniWrite($nConfig, "Downloadeinstellungen", "NumberOfBytesToRead", GUICtrlRead($GUI_Bytes))
 				$_zufallsip = GUICtrlRead($GUI_ZufallsIP)
 				If StringRight($_zufallsip, 1) <> "." Then $_zufallsip = $_zufallsip & "."
-				IniWrite("Data\config.ini", "X-FORWARDED-FOR", "FORWARDED_IP", $_zufallsip)
+				IniWrite($nConfig, "X-FORWARDED-FOR", "FORWARDED_IP", $_zufallsip)
 				MsgBox(64, "GrooveLoad", sprache("GR_CONN_RESTART"), 0, $GUI_FensterVerbindungseinstellungen)
-				ShellExecute("Data\AutoIt3.exe", '"' & @ScriptFullPath & '"')
+				ShellExecute($eAutoIt, '"' & @ScriptFullPath & '"')
 				Exit
 
 		EndSwitch
@@ -2524,7 +2556,7 @@ Func _WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
 						$SongInfosFuerDLListe[$a][2] = $SongInfo[$i][3] ; Interpret
 						$SongInfosFuerDLListe[$a][3] = $SongInfo[$i][2] ; Album
 						$SongInfosFuerDLListe[$a][4] = $SongInfo[$i][6] ; Cover-Info
-						FileWrite("Data\DLListe.txt", $SongInfosFuerDLListe[$a][0] & "|" & $SongInfosFuerDLListe[$a][1] & "|" & $SongInfosFuerDLListe[$a][2] & "|" & $SongInfosFuerDLListe[$a][3] & "|" & $SongInfosFuerDLListe[$a][4] & @CRLF)
+						FileWrite($fDownloadList, $SongInfosFuerDLListe[$a][0] & "|" & $SongInfosFuerDLListe[$a][1] & "|" & $SongInfosFuerDLListe[$a][2] & "|" & $SongInfosFuerDLListe[$a][3] & "|" & $SongInfosFuerDLListe[$a][4] & @CRLF)
 
 						Global $fadetext = $SongInfosFuerDLListe[$a][1] & " " & sprache("GR_MSG_ADDTODLL")
 						Fadelabel()
@@ -2607,7 +2639,7 @@ Func WM_GETMINMAXINFO($hWnd, $msg, $wParam, $lParam)
 EndFunc   ;==>WM_GETMINMAXINFO
 
 Func sprache ($string)
-	$returnstring = IniRead ("Data\Sprachen\"&$_sprache&".lng","GrooveLoad Language File",$string,$string)
+	$returnstring = IniRead ($pLanguages&$_sprache&".lng","GrooveLoad Language File",$string,$string)
 	$returnstring = StringReplace ($returnstring,"[CRLF]",@CRLF)
 	Return $returnstring
 EndFunc

@@ -2,12 +2,16 @@
 FileChangeDir (@ScriptDir)
 
 ;MsgBox (0,"","Reinhören gestartet")
-#include "WinHTTP\WinHTTP.au3"
-#include "Bass\Bass.au3"
+#include "Dependencies\WinHTTP\WinHTTP.au3"
+#include "Dependencies\Bass\Bass.au3"
 #include <String.au3>
 
 ; Wird für die Proxyfunktion benötigt
 Global Const $tagWINHTTP_PROXY_INFO = "DWORD  dwAccessType;ptr lpszProxy;ptr lpszProxyBypass;"
+
+$eAutoIt = '.\AutoIt\AutoIt3.exe'
+$pTemp = '..\Config\Temp\'
+$nConfig = '..\Config\config.ini'
 
 If $cmdline[0] <> 6 Then
 	Exit
@@ -25,10 +29,10 @@ If $StreamIP = "" Or $StreamKey = "" Then
 EndIf
 
 $Proxy = False
-If IniRead ("config.ini","Proxy","Proxy_nutzen","4") = 1 Then $Proxy = True
-$ProxyIP = IniRead ("config.ini","Proxy","Proxy_IP","")
+If IniRead ($nConfig,"Proxy","Proxy_nutzen","4") = 1 Then $Proxy = True
+$ProxyIP = IniRead ($nConfig,"Proxy","Proxy_IP","")
 
-If IniRead ("config.ini","X-FORWARDED-FOR","FORWARDED_nutzen","1") = 1 Then
+If IniRead ($nConfig,"X-FORWARDED-FOR","FORWARDED_nutzen","1") = 1 Then
 	$FakeIP = "X-FORWARDED-FOR: "&IniRead ("config.ini","X-FORWARDED-FOR","FORWARDED_IP","81.158.166.")& Random (100,255,1)
 Else
 	$FakeIP = ""
@@ -49,7 +53,7 @@ $header = _WinHttpQueryHeaders($h_openRequest)
 $dateigroesse = _StringBetween($header, "Content-Length: ", @CRLF)
 If IsArray($dateigroesse) Then $dateigroesse = $dateigroesse[0]
 
-$file = @ScriptDir & "\tmp\" & Random(0,9999999999999,1)&".tmp"
+$file = $pTemp & Random(0,9999999999999,1)&".tmp"
 Local $data = Binary("")
 FileDelete($file)
 $play = 0
@@ -58,8 +62,8 @@ $anzahlfehler = 0
 $dlfertig = 0
 $puffer = 0
 $current = "Blub"
-$bytesread = IniRead("config.ini", "Downloadeinstellungen", "NumberOfBytesToRead", 150000)
-ShellExecute ("AutoIt3.exe",'"Reinhören GUI.au3" "'&$file&'" "'&$Musiktitel&'" "'&$Spieldauer&'" "'&$Dateigroesse&'" "'&@AutoItPID&'" "'&$Fenstertitel&'" "'&$HauptGUI&'"')
+$bytesread = IniRead($nConfig, "Downloadeinstellungen", "NumberOfBytesToRead", 150000)
+ShellExecute ($eAutoIt,'".\Listen GUI.au3" "'&$file&'" "'&$Musiktitel&'" "'&$Spieldauer&'" "'&$Dateigroesse&'" "'&@AutoItPID&'" "'&$Fenstertitel&'" "'&$HauptGUI&'"')
 
 While 1
 	If $dlfertig = 2 Then

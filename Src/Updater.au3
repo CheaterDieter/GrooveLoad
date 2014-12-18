@@ -1,26 +1,32 @@
+#include <File.au3>
 #include "WinHTTP\WinHTTP.au3"
+
+$fNew = '..\Config\new.txt'
+$eAutoIt = '.\AutoIt\AutoIt3.exe'
+$fWinHTTP = '.\Dependencies\WinHTTP'
+
 
 SplashTextOn ("","The program is being updated.",500,70)
 
 FileChangeDir (@ScriptDir)
-$Programmverzeichnis = StringLeft (@ScriptDir,StringLen(@ScriptDir)-5)
+$Programmverzeichnis = @ScriptDir
 ConsoleWrite ($Programmverzeichnis&@CRLF)
 
-$neusteversion = FileReadLine ("new.txt",1)
+$neusteversion = FileReadLine ($fNew,1)
 If $neusteversion = "" Then Exit
 
 If StringRight (@ScriptDir,4) = "Data" Then
 	DirRemove ($Programmverzeichnis & "\temp",1)
 	DirCreate ($Programmverzeichnis & "\temp")
-	FileCopy ("AutoIt3.exe",$Programmverzeichnis & "\temp\AutoIt3.exe")
-	FileCopy ("Updater.au3",$Programmverzeichnis & "\temp\Updater.au3")
-	FileCopy ("new.txt",$Programmverzeichnis & "\temp\new.txt")
-	FileDelete ("new.txt")
-	DirCopy ("WinHTTP",$Programmverzeichnis & "\temp\WinHTTP")
+	FileCopy ($eAutoIt,$Programmverzeichnis & "\temp\AutoIt3.exe")
+	FileCopy (".\Updater.au3",$Programmverzeichnis & "\temp\Updater.au3")
+	FileCopy ($fNew,$Programmverzeichnis & "\temp\new.txt")
+	FileDelete ($fNew)
+	DirCopy ($fWinHTTP,$Programmverzeichnis & "\temp\WinHTTP")
 	ShellExecute ($Programmverzeichnis&"\temp\AutoIt3.exe",'"'&$Programmverzeichnis &'\temp\updater.au3"')
 	Exit
 Else
-	FileDelete ("new.txt")
+	FileDelete ($fNew)
 EndIf
 
 $hOpen = _WinHttpOpen("")
@@ -43,9 +49,9 @@ Else
 	FileWrite ($open,$data)
 	FileClose ($open)
 	Local $data= Binary ("")
-	ShellExecuteWait ($Programmverzeichnis & "\Data\7za.exe",'x "'&$Programmverzeichnis&'\temp\update.zip" -o"'&$Programmverzeichnis&'\temp'&'" -y')
+	ShellExecuteWait ($e7zip,'x "'&$Programmverzeichnis&'\temp\update.zip" -o"'&$Programmverzeichnis&'\temp'&'" -y')
 	FileDelete ($Programmverzeichnis & "\temp\update.zip")
-	$einstellungen = FileRead ($Programmverzeichnis & "\Data\config.ini")
+	$einstellungen = FileRead ($nConfig)
 	FileDelete ($Programmverzeichnis & "\temp\GrooveLoad\Data\config.ini")
 	$einstellungen = FileWrite ($Programmverzeichnis & "\temp\GrooveLoad\Data\config.ini",$einstellungen)
 
@@ -53,11 +59,11 @@ Else
 		FileDelete ($Programmverzeichnis&"\GrooveLoad.au3")
 		FileDelete ($Programmverzeichnis&"\GrooveLoad.vbs")
 		FileDelete ($Programmverzeichnis&"\Readme.txt")
-		FileDelete ($Programmverzeichnis&"\WICHTIG FÜR DEUTSCHE NUTZER.txt")
-		DirRemove ($Programmverzeichnis & "\Data",1)
+		FileDelete (_PathFull($Programmverzeichnis&"\..\WICHTIG FÜR DEUTSCHE NUTZER.txt"))
+		DirRemove ($Programmverzeichnis,1)
 		;RunWait('XCOPY "'& $Programmverzeichnis & "\temp\GrooveLoad" & '" "' & $Programmverzeichnis & '" /E')
 		DirCopy($Programmverzeichnis & "\temp\GrooveLoad",$Programmverzeichnis,1)
-		ShellExecute ($Programmverzeichnis&"\Data\run after update.vbs")
+		ShellExecute ($Programmverzeichnis&"\run after update.vbs")
 	Else
 		SplashOff ()
 		MsgBox (64,"GrooveLoad","Error while updating")

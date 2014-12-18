@@ -4,24 +4,34 @@
 #include <StaticConstants.au3>
 #include <WindowsConstants.au3>
 #include <GDIPlus.au3>
-#include "WinHTTP\WinHTTP.au3"
+#include "Dependencies\WinHTTP\WinHTTP.au3"
 #include <String.au3>
 #include <Array.au3>
 #include <File.au3>
+
 FileChangeDir(@ScriptDir)
-$_sprache = IniRead ("config.ini","Sprache","Sprache","English")
+
+$gIco = '..\Assets\icon.ico'
+
+$pLanguages = '..\Assets\Languages\'
+
+$pCover = '..\Assets\Cover\'
+$defaultCover = $pCover & 'default.jpg'
+
+$nConfig = '..\Config\config.ini'
+$_sprache = IniRead ($nConfig,"Sprache","Sprache","English")
 
 ; Wird für die Proxyfunktion benötigt
 Global Const $tagWINHTTP_PROXY_INFO = "DWORD  dwAccessType;ptr lpszProxy;ptr lpszProxyBypass;"
 
 $Proxy = False
-If IniRead ("config.ini","Proxy","Proxy_nutzen","4") = 1 Then $Proxy = True
-$ProxyIP = IniRead ("config.ini","Proxy","Proxy_IP","")
+If IniRead ($nConfig,"Proxy","Proxy_nutzen","4") = 1 Then $Proxy = True
+$ProxyIP = IniRead ($nConfig,"Proxy","Proxy_IP","")
 
 
 $Proxy = False
-If IniRead ("config.ini","Proxy","Proxy_nutzen","4") = 1 Then $Proxy = True
-$ProxyIP = IniRead ("config.ini","Proxy","Proxy_IP","")
+If IniRead ($nConfig,"Proxy","Proxy_nutzen","4") = 1 Then $Proxy = True
+$ProxyIP = IniRead ($nConfig,"Proxy","Proxy_IP","")
 $hOpen = _WinHttpOpen("")
 If $Proxy = True Then
 	$tProxyInfo = _WinHttpProxyInfoCreate($WINHTTP_ACCESS_TYPE_NAMED_PROXY, $ProxyIP, "localhost")
@@ -37,7 +47,7 @@ Dim $Pic[6]
 
 $GUI = GUICreate(sprache("CS_TITLE"), 640, 535)
 GUISetBkColor(0xFFFFFF)
-GUISetIcon("icon.ico")
+GUISetIcon($gIco)
 $suchbegriff = GUICtrlCreateInput("", 10, 30, 240, 21)
 GUICtrlCreateLabel(sprache("CS_SEARCHTEXT"), 10, 10, Default, 15)
 GUICtrlCreateLabel(sprache("CS_SEARCHAT"), 530, 10, Default, 15)
@@ -45,12 +55,12 @@ $itunes = GUICtrlCreateRadio("iTunes", 530, 25)
 GUICtrlSetState(-1, 1)
 GUICtrlCreateRadio("Amazon", 530, 43)
 For $i = 0 To 2
-	$Pic[$i] = GUICtrlCreatePic("cover\Cover.jpg", 10 + 200 * $i + 10 * $i, 70, 200, 200)
+	$Pic[$i] = GUICtrlCreatePic($defaultCover, 10 + 200 * $i + 10 * $i, 70, 200, 200)
 	GUICtrlSetState (-1,$GUI_DISABLE)
 	GUICtrlSetCursor (-1, 0)
 Next
 For $i = 0 To 2
-	$Pic[$i + 3] = GUICtrlCreatePic("cover\Cover.jpg", 10 + 200 * $i + 10 * $i, 300, 200, 200)
+	$Pic[$i + 3] = GUICtrlCreatePic($defaultCover, 10 + 200 * $i + 10 * $i, 300, 200, 200)
 	GUICtrlSetState (-1,$GUI_DISABLE)
 	GUICtrlSetCursor (-1, 0)
 Next
@@ -76,7 +86,7 @@ EndIf
 GUISetState(@SW_SHOW)
 
 $GrossGUI = GUICreate(sprache("CS_TITLE"), 500, 540, -1, -1, -1, -1,$GUI)
-GUISetIcon("icon.ico")
+GUISetIcon($gIco)
 GUICtrlCreateLabel(sprache("CS_SEARCHERROR"), 170, 96, 160, 17)
 $GrossBild = GUICtrlCreatePic("", 0, 0, 500, 500)
 $Add = GUICtrlCreateButton(sprache("CS_MP3ADD"), 297, 504, 160, 25)
@@ -111,8 +121,8 @@ While 1
 		If $nMsg[0] = $Pic[$i] Then
 			$guipos = WinGetPos($GUI)
 			WinMove($GrossGUI, "", $guipos[0] + 70, $guipos[1])
-			GUICtrlSetImage($GrossBild, "cover\cover.jpg")
-			GUICtrlSetImage($GrossBild, "cover\" & $i & ".jpg")
+			GUICtrlSetImage($GrossBild, $defaultCover)
+			GUICtrlSetImage($GrossBild, $pCover & $i & ".jpg")
 			$Bild = $i
 			GUISetState(@SW_SHOW, $GrossGUI)
 			GUISetState (@SW_DISABLE,$GUI)
@@ -126,7 +136,7 @@ While 1
 		$pfad = FileSaveDialog (sprache("CS_STORAGELOCATION"),"","(*.jpg)",16,GUICtrlRead ($suchbegriff)&".jpg",$GrossGUI)
 		FileChangeDir(@ScriptDir)
 		If $pfad <> "" Then
-			FileCopy (@ScriptDir & "\cover\"&$Bild&".jpg",$pfad,1+8)
+			FileCopy ($pCover&$Bild&".jpg",$pfad,1+8)
 		EndIf
 	EndIf
 
@@ -138,7 +148,7 @@ While 1
 			$Bild = FileOpenDialog (sprache("CS_PICTURE"),"","(*.jpg)",1,"",$GUI)
 			FileChangeDir(@ScriptDir)
 			If $Bild <> "" Then
-				ShellExecuteWait (@ScriptDir & '\metamp3\metamp3.exe','--pict "'&$Bild&'" "'&$pfad&'"',Default,Default,@SW_HIDE)
+				ShellExecuteWait ('.\Dependencies\metamp3\metamp3.exe','--pict "'&$Bild&'" "'&$pfad&'"',Default,Default,@SW_HIDE)
 				MsgBox (64,sprache("CS_TITLE"),sprache("CS_FINISH"),0,$GUI)
 			EndIf
 		EndIf
@@ -149,7 +159,7 @@ While 1
 		FileChangeDir(@ScriptDir)
 		If $pfad <> "" Then
 			If MsgBox (4+32,sprache("CS_TITLE"),StringReplace (sprache("CS_SHURE"),"[%]",@CRLF&$pfad&@CRLF),0,$GrossGUI) = 6 Then
-				ShellExecuteWait (@ScriptDir & '\metamp3\metamp3.exe','--pict "'&@ScriptDir & "\cover\"&$Bild&".jpg"&'" "'&$pfad&'"',Default,Default,@SW_HIDE)
+				ShellExecuteWait ('.\Dependencies\metamp3\metamp3.exe','--pict "'&$pCover&$Bild&".jpg"&'" "'&$pfad&'"',Default,Default,@SW_HIDE)
 				MsgBox (64,sprache("CS_TITLE"),sprache("CS_FINISH"),0,$GrossGUI)
 			EndIf
 		EndIf
@@ -167,8 +177,8 @@ While 1
 		GUICtrlSetState ($suche,$GUI_DISABLE)
 		GUICtrlSetState ($eigenescover,$GUI_DISABLE)
 		For $i = 0 To 5
-			GUICtrlSetImage($Pic[$i], "cover\cover.jpg")
-			FileDelete("cover\" & $i & ".jpg")
+			GUICtrlSetImage($Pic[$i], $defaultCover)
+			FileDelete($pCover & $i & ".jpg")
 			GUICtrlSetState ($Pic[$i],$GUI_DISABLE)
 		Next
 
@@ -207,7 +217,7 @@ While 1
 								$data &= _WinHttpReadData($h_openRequest, 2)
 							Until @error
 							If $data <> Binary("") Then
-								$coverpfad = "cover\" & $i & ".jpg"
+								$coverpfad = $pCover & $i & ".jpg"
 								$coverhandle = FileOpen($coverpfad, 16 + 2 + 8)
 								FileWrite($coverhandle, $data)
 								FileClose($coverhandle)
@@ -250,7 +260,7 @@ While 1
 						$data &= _WinHttpReadData($h_openRequest, 2)
 					Until @error
 					If $data <> Binary("") Then
-						$coverpfad = "cover\" & $i & ".jpg"
+						$coverpfad = $pCover & $i & ".jpg"
 						$coverhandle = FileOpen($coverpfad, 16 + 2 + 8)
 						FileWrite($coverhandle, $data)
 						FileClose($coverhandle)
@@ -263,7 +273,7 @@ While 1
 
 		EndIf
 		For $i = 0 To 5
-			If FileExists ("cover\" & $i & ".jpg") Then
+			If FileExists ($pCover & $i & ".jpg") Then
 				GUICtrlSetState ($Pic[$i],$GUI_ENABLE)
 			EndIf
 		Next
@@ -283,7 +293,7 @@ WEnd
 
 Func Clean()
 	For $i = 0 To 5
-		FileDelete("cover\" & $i & ".jpg")
+		FileDelete($pCover & $i & ".jpg")
 	Next
 	_WinHttpCloseHandle($hOpen)
 	_GDIPlus_PenDispose($hPen)
@@ -323,7 +333,7 @@ Func _GUICtrlProgressSetMarquee($h_Progress, $f_Mode = 1, $i_Time = 100)
 EndFunc   ;==>_GUICtrlProgressSetMarquee
 
 Func sprache ($string)
-	$returnstring = IniRead ("Sprachen\"&$_sprache&".lng","GrooveLoad Language File",$string,$string)
+	$returnstring = IniRead ($pLanguages&$_sprache&".lng","GrooveLoad Language File",$string,$string)
 	$returnstring = StringReplace ($returnstring,"[CRLF]",@CRLF)
 	Return $returnstring
 EndFunc

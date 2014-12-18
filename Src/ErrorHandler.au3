@@ -1,8 +1,10 @@
 #NoTrayIcon
 #include <EditConstants.au3>
+
 FileChangeDir (@ScriptDir)
-$pfad = StringLeft (@ScriptDir,StringLen(@ScriptDir)-5) & "\GrooveLoad.au3"
-$iPID=Run('AutoIt3.exe /ErrorStdOut "'&$pfad&'" -Dihydrogenmonoxid-',"",Default,6)
+
+$pfad = @ScriptDir & "\GrooveLoad.au3"
+$iPID=Run('.\AutoIt\AutoIt3.exe /ErrorStdOut "'&$pfad&'" -Dihydrogenmonoxid-',"",Default,6)
 $sErrorMsg = ""
 
 ProcessWait($iPID)
@@ -14,7 +16,7 @@ While 1
 WEnd
 If $sErrorMsg = "" Then Exit
 
-$sprache = IniRead ("config.ini","Sprache","Sprache","English")
+$sprache = IniRead ('..\Config\config.ini',"Sprache","Sprache","English")
 
 If $sprache = "Deutsch" Then
 	$lng = 0
@@ -36,7 +38,7 @@ $text[1][4]="Please describe here what you did before the crash."
 
 
 $GUI = GUICreate("GrooveLoad", 419, 192)
-GUISetIcon("icon.ico")
+GUISetIcon('..\Assets\icon.ico')
 GUISetBkColor(0xFFFFFF)
 $Label1 = GUICtrlCreateLabel("Houston, we’ve had a problem.", 8, 3, 364, 25)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial Black")
@@ -69,7 +71,7 @@ While 1
 		Case $send
 			ShellExecute ("http://hegi.pfweb.eu/grooveload/kontakt/?l="&$sprache&"&Text="&URLEncode ($text[$lng][4]&@CRLF&@CRLF&"-----"&@CRLF&$sErrorMsg))
 		Case $restart
-			ShellExecute ("AutoIt3.exe",'"'&@ScriptFullPath&'"')
+			ShellExecute (".\AutoIt\AutoIt3.exe",'"'&@ScriptFullPath&'"')
 			Exit
 
 	EndSwitch
