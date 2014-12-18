@@ -33,7 +33,7 @@ If IniRead ($nConfig,"Proxy","Proxy_nutzen","4") = 1 Then $Proxy = True
 $ProxyIP = IniRead ($nConfig,"Proxy","Proxy_IP","")
 
 If IniRead ($nConfig,"X-FORWARDED-FOR","FORWARDED_nutzen","1") = 1 Then
-	$FakeIP = "X-FORWARDED-FOR: "&IniRead ("config.ini","X-FORWARDED-FOR","FORWARDED_IP","81.158.166.")& Random (100,255,1)
+	$FakeIP = "X-FORWARDED-FOR: "&IniRead ("$nConfig","X-FORWARDED-FOR","FORWARDED_IP","81.158.166.")& Random (100,255,1)
 Else
 	$FakeIP = ""
 EndIf
