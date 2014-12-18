@@ -2118,7 +2118,7 @@ While 1
 			WEnd
 
 		Case $GUI_verknuepfung
-			FileCreateShortcut($eAutoIt, @DesktopDir & "\GrooveLoad.lnk", "", '"' & @ScriptFullPath & '"', "", _PathFull($fIco))
+			FileCreateShortcut(_PathFull($eAutoIt), @DesktopDir & "\GrooveLoad.lnk", "", '"' & @ScriptFullPath & '"', "", _PathFull($fIco))
 			MsgBox(64, "GrooveLoad", sprache("GR_SHORTCUT_TEXT"), 0, $HauptGUI)
 		Case $manuell_Cover
 			ShellExecute($eAutoIt, '.\Coversearch.au3')
