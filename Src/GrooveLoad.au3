@@ -86,6 +86,11 @@ DebugWrite ("GrooveLoad " & $version)
 
 _GDIPlus_Startup()
 
+; If the directory does not exist, create it
+If DirGetSize("..\Config") = -1 Then
+	DirCreate("..\Config")
+EndIf
+
 $fTest = "..\Config\test.txt"
 FileWrite($fTest, "Rauchender Tankwart - leuchtendes Beispiel")
 If Not FileExists($fTest) Then
