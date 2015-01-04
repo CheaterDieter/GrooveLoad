@@ -190,4 +190,4 @@ CS_SELECTMP3=Choisir un fichier MP3
 CS_PICTURE=Choisir une image
 CS_FINISH=La pochette a été intégrée au fichier MP3.
 CS_SHURE=Êtes-vous sûr de vouloir utiliser le fichier[%]en tant que nouvelle pochette ? L'ancienne sera alors écrasée.
-CS_ABOUT=GrooveLoad Recherche de pochette d'album est un composant de GrooveLoad. Ce programme permet de trouver une pochette d'album correspondant à un titre recherché. Elle peut ensuite être intégrée aux fichiers MP3.[CRLF]Pour démarrer GrooveLoad Recherche de pochette d'album sans ouvrir GrooveLoad, lancez le fichier "Cover.vbs" depuis le dossier "Data".
+CS_ABOUT=GrooveLoad Recherche de pochette d'album est un composant de GrooveLoad. Ce programme permet de trouver une pochette d'album correspondant à un titre recherché. Elle peut ensuite être intégrée aux fichiers MP3.[CRLF]Pour démarrer GrooveLoad Recherche de pochette d'album sans ouvrir GrooveLoad, cliquez sur le raccourci "CoverSearch" présent dans le dossier de GrooveLoad.

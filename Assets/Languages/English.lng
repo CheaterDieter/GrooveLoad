@@ -190,4 +190,4 @@ CS_SELECTMP3=Select MP3 file
 CS_PICTURE=Select a picture
 CS_FINISH=The cover was added to the MP3 file.
 CS_SHURE=Are you really want to add the cover the following file? The old one will be overwritten.[%]
-CS_ABOUT=Groove Load Cover Search is a part of GrooveLoad. The progam allows you to search for CD Covers. These can be added to the MP3 files.[CRLF]To start Groove Load Cover Search without GrooveLoad run the file "Cover.vbs" in the folder "Data".
+CS_ABOUT=Groove Load Cover Search is a part of GrooveLoad. The progam allows you to search for CD Covers. These can be added to the MP3 files.[CRLF]To start Groove Load Cover Search without GrooveLoad, click on the shortcut 'CoverSearch' in the root directory of the program.
